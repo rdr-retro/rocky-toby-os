@@ -1,5 +1,7 @@
 # Rocky & Toby OS — un sistema operativo x86_64 escrito 100% en Rust
 
+[![Licencia: MIT](https://img.shields.io/badge/licencia-MIT-yellow.svg)](LICENSE)
+
 **rocky** (tambien llamado **Rocky & Toby OS**) es un sistema operativo arrancable, escrito integramente en Rust, que
 corre en modo largo (x86_64) sobre un PC BIOS. No esta basado en Linux ni en
 ningun otro sistema: **el diseño es propio**. Es un sistema **monousuario y
@@ -1849,3 +1851,13 @@ testigo (`/.semilla`) para no repetirlo.
 - Un `#DF` provocado por un proceso de **anillo 3 no se contiene**: la falta de
   pila de un doble fallo no se puede reparar con garantias, asi que va a la pantalla
   azul (a diferencia de `#UD`, `#GP`, `#PF`... que solo terminan ese proceso).
+
+## Licencia
+
+Rocky & Toby OS se distribuye bajo la **licencia MIT**. Puedes usarlo, copiarlo,
+modificarlo y redistribuirlo, tambien comercialmente, conservando el aviso de
+copyright. El texto completo esta en [LICENSE](LICENSE).
+
+Los recursos de terceros incluidos en el repositorio (tema `AQUA`, fuentes de
+`Fonts/` y cabeceras de referencia de AMD en `_refs/`) conservan sus licencias
+originales y no quedan cubiertos por la MIT.
