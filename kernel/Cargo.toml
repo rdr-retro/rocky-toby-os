@@ -1,0 +1,25 @@
+[package]
+name = "rocky-kernel"
+version = "0.1.0"
+edition = "2021"
+description = "rocky - kernel x86_64 escrito en Rust (no_std), con el sistema de ficheros Estrato"
+
+[[bin]]
+name = "rocky"
+path = "src/main.rs"
+
+# Librerias propias de rocky, dentro de `src/libraries/`. Son `no_std` y solo
+# necesitan `core` + `alloc`, asi que se compilan para el mismo destino.
+[dependencies]
+inflate = { path = "src/libraries/inflate" }
+png = { path = "src/libraries/png" }
+toby-appkit = { path = "src/libraries/toby_appkit" }
+rockyhw = { path = "src/libraries/rockyhw" }
+
+[profile.release]
+panic = "abort"
+# Mantiene 48 KiB libres antes de la pila temporal del cargador en 0x90000.
+opt-level = "z"
+lto = true
+codegen-units = 1
+debug = false

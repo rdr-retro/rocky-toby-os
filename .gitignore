@@ -1,0 +1,23 @@
+# Directorios de compilacion de cada crate
+**/target/
+**/target-*/
+
+# Artefactos generados por `xtask build`
+build/
+*.img
+*.ppm
+
+# Instantaneas historicas del proyecto (incluyen imagenes de disco de ~800 MB)
+_snapshots/
+
+# Registros de depuracion y salidas temporales
+*.log
+q*.log
+out*.txt
+stderr*.txt
+stdout*.txt
+
+# Basura del sistema operativo anfitrion
+Thumbs.db
+desktop.ini
+.DS_Store

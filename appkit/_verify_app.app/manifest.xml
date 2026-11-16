@@ -1,0 +1,8 @@
+<app nombre="_verify_app" version="1.0">
+  <identidad titulo="Verify App"/>
+  <ui principal="ui/main.toby" tema="aqua">
+    <vista nombre="principal" archivo="ui/main.toby"/>
+  </ui>
+  <codigo lenguaje="rust" fuente="code/src/main.rs"/>
+  <capacidades><capacidad nombre="ventana"/></capacidades>
+</app>

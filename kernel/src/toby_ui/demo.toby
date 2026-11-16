@@ -1,0 +1,43 @@
+<!-- Primera aplicacion Toby UI.
+
+     Este fichero SOLO declara: que hay, como se ordena y a que accion
+     registrada llama cada boton. No hay variables, ni funciones, ni bucles,
+     ni condiciones, ni codigo de ningun tipo: las tres claves de `action`
+     existen en el registro de la aplicacion (`toby_ui/demo.rs`), y si alguna
+     no existiera el fallo seria controlado y visible, no una caida. -->
+<toby-app name="demo">
+
+  <!-- La ventana manda: tamano fijo. El color de cada boton sale del tema
+       AQUA (variant), no del documento. -->
+  <window title="Toby UI  -  primera aplicacion" width="560" height="200">
+
+    <!-- La columna organiza; el hueco entre botones es spacing y el margen
+         interior es padding. Este documento usa el flujo; una hoja tambien
+         puede colocarse en un sitio exacto declarando x/y (es lo que genera
+         el ensamblador visual). -->
+    <column padding="16" spacing="12">
+
+      <!-- Fila de acciones reales. -->
+      <row spacing="8">
+        <button id="guardar"   name="btn-guardar"   title="Guardar"   variant="blue"   action="settings.save"/>
+        <button id="reiniciar" name="btn-reiniciar" title="Reiniciar" variant="orange" action="settings.reset"/>
+        <button id="salir"     name="btn-salir"     title="Salir"     variant="red"    action="window.close"/>
+      </row>
+
+      <!-- Fila de muestrario: botones sin accion, solo apariencia del kit. -->
+      <row spacing="8">
+        <button id="azul"     name="muestra-azul"     title="Azul"     variant="blue"/>
+        <button id="verde"    name="muestra-verde"    title="Verde"    variant="green"/>
+        <button id="magenta"  name="muestra-magenta"  title="Magenta"  variant="magenta"/>
+        <button id="amarillo" name="muestra-amarillo" title="Amarillo" variant="yellow"/>
+        <button id="blanco"   name="muestra-blanco"   title="Blanco"   variant="white"/>
+        <button id="apagado"  name="muestra-apagado"  title="Apagado"  enabled="false"/>
+      </row>
+
+      <!-- El modo porcentual no mantiene un timer; se repinta cuando cambia
+           el valor declarado por la aplicación. -->
+      <progress id="instalacion" mode="determinate" value="68" width="180" height="16"/>
+
+    </column>
+  </window>
+</toby-app>

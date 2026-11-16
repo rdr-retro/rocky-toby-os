@@ -1,0 +1,5 @@
+<toby-app name="textedit">
+  <window title="TextEdit" width="720" height="500" mode="window" align="stretch">
+    <column padding="0"/>
+  </window>
+</toby-app>

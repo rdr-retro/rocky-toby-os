@@ -1,0 +1,22 @@
+<toby-app name="toby_finder">
+  <window title="Toby Finder" width="640" height="420" mode="window" align="stretch">
+    <column padding="34" spacing="12" align="stretch" grow="1">
+      <row spacing="10" align="stretch">
+        <image src="/system/apps/toby_finder.app/img/toby_finder.png" width="44" height="44"/>
+        <button id="nombre" title="Toby Finder — gestor de archivos" variant="blue" enabled="false"/>
+      </row>
+      <row spacing="12" align="stretch" grow="1">
+        <column padding="8" spacing="8" align="stretch">
+          <button id="favoritos" title="Favoritos" variant="blue" enabled="false"/>
+          <button id="inicio" title="Inicio" variant="white" enabled="false"/>
+          <button id="sistema" title="Sistema" variant="white" enabled="false"/>
+          <button id="recientes" title="Recientes" variant="white" enabled="false"/>
+        </column>
+        <column padding="12" spacing="10" align="stretch" grow="1">
+          <button id="ruta" title="Rocky — /" variant="white" enabled="false"/>
+          <button id="contenido" title="El navegador de archivos está preparado para conectar la navegación" variant="white" enabled="false"/>
+        </column>
+      </row>
+    </column>
+  </window>
+</toby-app>

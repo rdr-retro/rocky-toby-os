@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AQUA</title>
+<link rel="stylesheet" href="button.css">
+<link rel="stylesheet" href="radio.css">
+<link rel="stylesheet" href="circular.css">
+<link rel="stylesheet" href="check.css">
+<link rel="stylesheet" href="segmented.css">
+<link rel="stylesheet" href="popup.css">
+<link rel="stylesheet" href="box.css">
+<link rel="stylesheet" href="field.css">
+<link rel="stylesheet" href="slider.css">
+<link rel="stylesheet" href="progress.css">
+<style>
+  /* Demo: sin decoración, sólo fondo blanco. */
+  body { background: #fff; }
+</style>
+</head>
+<body>
+
+<h2>Botón</h2>
+<div>
+  <button class="aqua-btn aqua-btn--green" type="button" style="--aqua-size:18px"><span class="aqua-btn__cap aqua-btn__cap--left"></span><span class="aqua-btn__body"><span class="aqua-btn__label">Aceptar</span></span><span class="aqua-btn__cap aqua-btn__cap--right"></span></button>
+  <button class="aqua-btn aqua-btn--red" type="button" style="--aqua-size:18px"><span class="aqua-btn__cap aqua-btn__cap--left"></span><span class="aqua-btn__body"><span class="aqua-btn__label">Aceptar</span></span><span class="aqua-btn__cap aqua-btn__cap--right"></span></button>
+  <button class="aqua-btn aqua-btn--orange" type="button" style="--aqua-size:18px"><span class="aqua-btn__cap aqua-btn__cap--left"></span><span class="aqua-btn__body"><span class="aqua-btn__label">Aceptar</span></span><span class="aqua-btn__cap aqua-btn__cap--right"></span></button>
+  <button class="aqua-btn aqua-btn--yellow" type="button" style="--aqua-size:18px"><span class="aqua-btn__cap aqua-btn__cap--left"></span><span class="aqua-btn__body"><span class="aqua-btn__label">Aceptar</span></span><span class="aqua-btn__cap aqua-btn__cap--right"></span></button>
+  <button class="aqua-btn aqua-btn--blue" type="button" style="--aqua-size:18px"><span class="aqua-btn__cap aqua-btn__cap--left"></span><span class="aqua-btn__body"><span class="aqua-btn__label">Aceptar</span></span><span class="aqua-btn__cap aqua-btn__cap--right"></span></button>
+  <button class="aqua-btn aqua-btn--magenta" type="button" style="--aqua-size:18px"><span class="aqua-btn__cap aqua-btn__cap--left"></span><span class="aqua-btn__body"><span class="aqua-btn__label">Aceptar</span></span><span class="aqua-btn__cap aqua-btn__cap--right"></span></button>
+  <button class="aqua-btn aqua-btn--white" type="button" style="--aqua-size:18px"><span class="aqua-btn__cap aqua-btn__cap--left"></span><span class="aqua-btn__body"><span class="aqua-btn__label">Aceptar</span></span><span class="aqua-btn__cap aqua-btn__cap--right"></span></button>
+</div>
+<div><button class="aqua-btn" type="button" style="--aqua-size:26px"><span class="aqua-btn__cap aqua-btn__cap--left"></span><span class="aqua-btn__body"><span class="aqua-btn__label">Aceptar</span></span><span class="aqua-btn__cap aqua-btn__cap--right"></span></button></div>
+<div><button class="aqua-btn" type="button" style="--aqua-size:36px"><span class="aqua-btn__cap aqua-btn__cap--left"></span><span class="aqua-btn__body"><span class="aqua-btn__label">Aceptar</span></span><span class="aqua-btn__cap aqua-btn__cap--right"></span></button></div>
+<div><button class="aqua-btn" type="button" style="--aqua-size:48px"><span class="aqua-btn__cap aqua-btn__cap--left"></span><span class="aqua-btn__body"><span class="aqua-btn__label">Aceptar</span></span><span class="aqua-btn__cap aqua-btn__cap--right"></span></button></div>
+
+<h2>Radio</h2>
+<div>
+  <label class="aqua-radio" style="--aqua-radio-size:18px">
+    <input class="aqua-radio__input" type="radio" name="r18">
+    <span class="aqua-radio__dot" aria-hidden="true"></span>
+  </label>
+  <label class="aqua-radio" style="--aqua-radio-size:18px">
+    <input class="aqua-radio__input" type="radio" name="r18" checked>
+    <span class="aqua-radio__dot" aria-hidden="true"></span>
+  </label>
+</div>
+<div>
+  <label class="aqua-radio" style="--aqua-radio-size:26px">
+    <input class="aqua-radio__input" type="radio" name="r26">
+    <span class="aqua-radio__dot" aria-hidden="true"></span>
+  </label>
+  <label class="aqua-radio" style="--aqua-radio-size:26px">
+    <input class="aqua-radio__input" type="radio" name="r26" checked>
+    <span class="aqua-radio__dot" aria-hidden="true"></span>
+  </label>
+</div>
+<div>
+  <label class="aqua-radio" style="--aqua-radio-size:36px">
+    <input class="aqua-radio__input" type="radio" name="r36">
+    <span class="aqua-radio__dot" aria-hidden="true"></span>
+  </label>
+  <label class="aqua-radio" style="--aqua-radio-size:36px">
+    <input class="aqua-radio__input" type="radio" name="r36" checked>
+    <span class="aqua-radio__dot" aria-hidden="true"></span>
+  </label>
+</div>
+<div>
+  <label class="aqua-radio" style="--aqua-radio-size:48px">
+    <input class="aqua-radio__input" type="radio" name="r48">
+    <span class="aqua-radio__dot" aria-hidden="true"></span>
+  </label>
+  <label class="aqua-radio" style="--aqua-radio-size:48px">
+    <input class="aqua-radio__input" type="radio" name="r48" checked>
+    <span class="aqua-radio__dot" aria-hidden="true"></span>
+  </label>
+</div>
+<div>
+  <label class="aqua-radio aqua-radio--green" style="--aqua-radio-size:26px">
+    <input class="aqua-radio__input" type="radio" name="rc-green" checked>
+    <span class="aqua-radio__dot" aria-hidden="true"></span>
+  </label>
+  <label class="aqua-radio aqua-radio--red" style="--aqua-radio-size:26px">
+    <input class="aqua-radio__input" type="radio" name="rc-red" checked>
+    <span class="aqua-radio__dot" aria-hidden="true"></span>
+  </label>
+  <label class="aqua-radio aqua-radio--orange" style="--aqua-radio-size:26px">
+    <input class="aqua-radio__input" type="radio" name="rc-orange" checked>
+    <span class="aqua-radio__dot" aria-hidden="true"></span>
+  </label>
+  <label class="aqua-radio aqua-radio--yellow" style="--aqua-radio-size:26px">
+    <input class="aqua-radio__input" type="radio" name="rc-yellow" checked>
+    <span class="aqua-radio__dot" aria-hidden="true"></span>
+  </label>
+  <label class="aqua-radio aqua-radio--blue" style="--aqua-radio-size:26px">
+    <input class="aqua-radio__input" type="radio" name="rc-blue" checked>
+    <span class="aqua-radio__dot" aria-hidden="true"></span>
+  </label>
+  <label class="aqua-radio aqua-radio--magenta" style="--aqua-radio-size:26px">
+    <input class="aqua-radio__input" type="radio" name="rc-magenta" checked>
+    <span class="aqua-radio__dot" aria-hidden="true"></span>
+  </label>
+</div>
+
+<h2>Circular button</h2>
+<div>
+  <button class="aqua-circular" type="button" aria-label="Botón" style="--aqua-circular-size:18px"><span class="aqua-circular__face" aria-hidden="true"></span></button>
+  <button class="aqua-circular" type="button" aria-label="Botón" style="--aqua-circular-size:26px"><span class="aqua-circular__face" aria-hidden="true"></span></button>
+  <button class="aqua-circular" type="button" aria-label="Botón" style="--aqua-circular-size:36px"><span class="aqua-circular__face" aria-hidden="true"></span></button>
+  <button class="aqua-circular" type="button" aria-label="Botón" style="--aqua-circular-size:48px"><span class="aqua-circular__face" aria-hidden="true"></span></button>
+</div>
+<div>
+  <button class="aqua-circular aqua-circular--green" type="button" aria-label="Botón verde" style="--aqua-circular-size:26px"><span class="aqua-circular__face" aria-hidden="true"></span></button>
+  <button class="aqua-circular aqua-circular--red" type="button" aria-label="Botón rojo" style="--aqua-circular-size:26px"><span class="aqua-circular__face" aria-hidden="true"></span></button>
+  <button class="aqua-circular aqua-circular--orange" type="button" aria-label="Botón naranja" style="--aqua-circular-size:26px"><span class="aqua-circular__face" aria-hidden="true"></span></button>
+  <button class="aqua-circular aqua-circular--yellow" type="button" aria-label="Botón amarillo" style="--aqua-circular-size:26px"><span class="aqua-circular__face" aria-hidden="true"></span></button>
+  <button class="aqua-circular aqua-circular--blue" type="button" aria-label="Botón azul" style="--aqua-circular-size:26px"><span class="aqua-circular__face" aria-hidden="true"></span></button>
+  <button class="aqua-circular aqua-circular--magenta" type="button" aria-label="Botón magenta" style="--aqua-circular-size:26px"><span class="aqua-circular__face" aria-hidden="true"></span></button>
+  <button class="aqua-circular aqua-circular--white" type="button" aria-label="Botón blanco" style="--aqua-circular-size:26px"><span class="aqua-circular__face" aria-hidden="true"></span></button>
+</div>
+
+<h2>Check</h2>
+<div>
+  <label class="aqua-check" style="--aqua-check-size:18px">
+    <input class="aqua-check__input" type="checkbox">
+    <span class="aqua-check__box" aria-hidden="true"></span>
+  </label>
+  <label class="aqua-check" style="--aqua-check-size:18px">
+    <input class="aqua-check__input" type="checkbox" checked>
+    <span class="aqua-check__box" aria-hidden="true"></span>
+  </label>
+</div>
+<div>
+  <label class="aqua-check" style="--aqua-check-size:26px">
+    <input class="aqua-check__input" type="checkbox">
+    <span class="aqua-check__box" aria-hidden="true"></span>
+  </label>
+  <label class="aqua-check" style="--aqua-check-size:26px">
+    <input class="aqua-check__input" type="checkbox" checked>
+    <span class="aqua-check__box" aria-hidden="true"></span>
+  </label>
+</div>
+<div>
+  <label class="aqua-check" style="--aqua-check-size:36px">
+    <input class="aqua-check__input" type="checkbox">
+    <span class="aqua-check__box" aria-hidden="true"></span>
+  </label>
+  <label class="aqua-check" style="--aqua-check-size:36px">
+    <input class="aqua-check__input" type="checkbox" checked>
+    <span class="aqua-check__box" aria-hidden="true"></span>
+  </label>
+</div>
+<div>
+  <label class="aqua-check" style="--aqua-check-size:48px">
+    <input class="aqua-check__input" type="checkbox">
+    <span class="aqua-check__box" aria-hidden="true"></span>
+  </label>
+  <label class="aqua-check" style="--aqua-check-size:48px">
+    <input class="aqua-check__input" type="checkbox" checked>
+    <span class="aqua-check__box" aria-hidden="true"></span>
+  </label>
+</div>
+<div>
+  <label class="aqua-check aqua-check--green" style="--aqua-check-size:26px">
+    <input class="aqua-check__input" type="checkbox" checked>
+    <span class="aqua-check__box" aria-hidden="true"></span>
+  </label>
+  <label class="aqua-check aqua-check--red" style="--aqua-check-size:26px">
+    <input class="aqua-check__input" type="checkbox" checked>
+    <span class="aqua-check__box" aria-hidden="true"></span>
+  </label>
+  <label class="aqua-check aqua-check--orange" style="--aqua-check-size:26px">
+    <input class="aqua-check__input" type="checkbox" checked>
+    <span class="aqua-check__box" aria-hidden="true"></span>
+  </label>
+  <label class="aqua-check aqua-check--yellow" style="--aqua-check-size:26px">
+    <input class="aqua-check__input" type="checkbox" checked>
+    <span class="aqua-check__box" aria-hidden="true"></span>
+  </label>
+  <label class="aqua-check aqua-check--blue" style="--aqua-check-size:26px">
+    <input class="aqua-check__input" type="checkbox" checked>
+    <span class="aqua-check__box" aria-hidden="true"></span>
+  </label>
+  <label class="aqua-check aqua-check--magenta" style="--aqua-check-size:26px">
+    <input class="aqua-check__input" type="checkbox" checked>
+    <span class="aqua-check__box" aria-hidden="true"></span>
+  </label>
+</div>
+
+<h2>Segmented</h2>
+<div>
+  <div class="aqua-seg" role="radiogroup" aria-label="18" style="--aqua-seg-h:18px">
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="s18" checked><span class="aqua-seg__face">Día</span></label>
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="s18"><span class="aqua-seg__face">Semana</span></label>
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="s18"><span class="aqua-seg__face">Mes</span></label>
+  </div>
+</div>
+<div>
+  <div class="aqua-seg" role="radiogroup" aria-label="26" style="--aqua-seg-h:26px">
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="s26" checked><span class="aqua-seg__face">Día</span></label>
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="s26"><span class="aqua-seg__face">Semana</span></label>
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="s26"><span class="aqua-seg__face">Mes</span></label>
+  </div>
+</div>
+<div>
+  <div class="aqua-seg" role="radiogroup" aria-label="36" style="--aqua-seg-h:36px">
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="s36" checked><span class="aqua-seg__face">Día</span></label>
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="s36"><span class="aqua-seg__face">Semana</span></label>
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="s36"><span class="aqua-seg__face">Mes</span></label>
+  </div>
+</div>
+<div>
+  <div class="aqua-seg" role="radiogroup" aria-label="48" style="--aqua-seg-h:48px">
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="s48" checked><span class="aqua-seg__face">Día</span></label>
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="s48"><span class="aqua-seg__face">Semana</span></label>
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="s48"><span class="aqua-seg__face">Mes</span></label>
+  </div>
+</div>
+<div>
+  <div class="aqua-seg aqua-seg--green" role="radiogroup" aria-label="Verde" style="--aqua-seg-h:26px">
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="sc-green" checked><span class="aqua-seg__face">Día</span></label>
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="sc-green"><span class="aqua-seg__face">Semana</span></label>
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="sc-green"><span class="aqua-seg__face">Mes</span></label>
+  </div>
+  <div class="aqua-seg aqua-seg--red" role="radiogroup" aria-label="Rojo" style="--aqua-seg-h:26px">
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="sc-red" checked><span class="aqua-seg__face">Día</span></label>
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="sc-red"><span class="aqua-seg__face">Semana</span></label>
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="sc-red"><span class="aqua-seg__face">Mes</span></label>
+  </div>
+  <div class="aqua-seg aqua-seg--orange" role="radiogroup" aria-label="Naranja" style="--aqua-seg-h:26px">
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="sc-orange" checked><span class="aqua-seg__face">Día</span></label>
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="sc-orange"><span class="aqua-seg__face">Semana</span></label>
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="sc-orange"><span class="aqua-seg__face">Mes</span></label>
+  </div>
+  <div class="aqua-seg aqua-seg--yellow" role="radiogroup" aria-label="Amarillo" style="--aqua-seg-h:26px">
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="sc-yellow" checked><span class="aqua-seg__face">Día</span></label>
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="sc-yellow"><span class="aqua-seg__face">Semana</span></label>
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="sc-yellow"><span class="aqua-seg__face">Mes</span></label>
+  </div>
+  <div class="aqua-seg aqua-seg--blue" role="radiogroup" aria-label="Azul" style="--aqua-seg-h:26px">
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="sc-blue" checked><span class="aqua-seg__face">Día</span></label>
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="sc-blue"><span class="aqua-seg__face">Semana</span></label>
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="sc-blue"><span class="aqua-seg__face">Mes</span></label>
+  </div>
+  <div class="aqua-seg aqua-seg--magenta" role="radiogroup" aria-label="Magenta" style="--aqua-seg-h:26px">
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="sc-magenta" checked><span class="aqua-seg__face">Día</span></label>
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="sc-magenta"><span class="aqua-seg__face">Semana</span></label>
+    <label class="aqua-seg__item"><input class="aqua-seg__input" type="radio" name="sc-magenta"><span class="aqua-seg__face">Mes</span></label>
+  </div>
+</div>
+
+<h2>Stepper Control</h2>
+<div>
+  <span class="aqua-pop" style="--aqua-pop-h:48px">
+    <select class="aqua-pop__input" aria-label="Zoom">
+      <option>Ajustar a ventana</option>
+      <option selected>100 %</option>
+      <option>125 %</option>
+      <option>150 %</option>
+    </select>
+    <span class="aqua-pop__skin" aria-hidden="true">
+      <span class="aqua-pop__seg aqua-pop__seg--text"></span>
+      <span class="aqua-pop__seg aqua-pop__seg--step">
+        <span class="aqua-pop__pair">
+          <span class="aqua-pop__arrow aqua-pop__arrow--up"></span>
+          <span class="aqua-pop__arrow aqua-pop__arrow--down"></span>
+        </span>
+      </span>
+    </span>
+  </span>
+</div>
+<div>
+  <span class="aqua-pop aqua-pop--green" style="--aqua-pop-h:36px">
+    <select class="aqua-pop__input" aria-label="Zoom verde">
+      <option selected>100 %</option>
+      <option>125 %</option>
+    </select>
+    <span class="aqua-pop__skin" aria-hidden="true">
+      <span class="aqua-pop__seg aqua-pop__seg--text"></span>
+      <span class="aqua-pop__seg aqua-pop__seg--step">
+        <span class="aqua-pop__pair">
+          <span class="aqua-pop__arrow aqua-pop__arrow--up"></span>
+          <span class="aqua-pop__arrow aqua-pop__arrow--down"></span>
+        </span>
+      </span>
+    </span>
+  </span>
+  <span class="aqua-pop aqua-pop--red" style="--aqua-pop-h:36px">
+    <select class="aqua-pop__input" aria-label="Zoom rojo">
+      <option selected>100 %</option>
+      <option>125 %</option>
+    </select>
+    <span class="aqua-pop__skin" aria-hidden="true">
+      <span class="aqua-pop__seg aqua-pop__seg--text"></span>
+      <span class="aqua-pop__seg aqua-pop__seg--step">
+        <span class="aqua-pop__pair">
+          <span class="aqua-pop__arrow aqua-pop__arrow--up"></span>
+          <span class="aqua-pop__arrow aqua-pop__arrow--down"></span>
+        </span>
+      </span>
+    </span>
+  </span>
+  <span class="aqua-pop aqua-pop--orange" style="--aqua-pop-h:36px">
+    <select class="aqua-pop__input" aria-label="Zoom naranja">
+      <option selected>100 %</option>
+      <option>125 %</option>
+    </select>
+    <span class="aqua-pop__skin" aria-hidden="true">
+      <span class="aqua-pop__seg aqua-pop__seg--text"></span>
+      <span class="aqua-pop__seg aqua-pop__seg--step">
+        <span class="aqua-pop__pair">
+          <span class="aqua-pop__arrow aqua-pop__arrow--up"></span>
+          <span class="aqua-pop__arrow aqua-pop__arrow--down"></span>
+        </span>
+      </span>
+    </span>
+  </span>
+  <span class="aqua-pop aqua-pop--yellow" style="--aqua-pop-h:36px">
+    <select class="aqua-pop__input" aria-label="Zoom amarillo">
+      <option selected>100 %</option>
+      <option>125 %</option>
+    </select>
+    <span class="aqua-pop__skin" aria-hidden="true">
+      <span class="aqua-pop__seg aqua-pop__seg--text"></span>
+      <span class="aqua-pop__seg aqua-pop__seg--step">
+        <span class="aqua-pop__pair">
+          <span class="aqua-pop__arrow aqua-pop__arrow--up"></span>
+          <span class="aqua-pop__arrow aqua-pop__arrow--down"></span>
+        </span>
+      </span>
+    </span>
+  </span>
+  <span class="aqua-pop aqua-pop--blue" style="--aqua-pop-h:36px">
+    <select class="aqua-pop__input" aria-label="Zoom azul">
+      <option selected>100 %</option>
+      <option>125 %</option>
+    </select>
+    <span class="aqua-pop__skin" aria-hidden="true">
+      <span class="aqua-pop__seg aqua-pop__seg--text"></span>
+      <span class="aqua-pop__seg aqua-pop__seg--step">
+        <span class="aqua-pop__pair">
+          <span class="aqua-pop__arrow aqua-pop__arrow--up"></span>
+          <span class="aqua-pop__arrow aqua-pop__arrow--down"></span>
+        </span>
+      </span>
+    </span>
+  </span>
+  <span class="aqua-pop aqua-pop--magenta" style="--aqua-pop-h:36px">
+    <select class="aqua-pop__input" aria-label="Zoom magenta">
+      <option selected>100 %</option>
+      <option>125 %</option>
+    </select>
+    <span class="aqua-pop__skin" aria-hidden="true">
+      <span class="aqua-pop__seg aqua-pop__seg--text"></span>
+      <span class="aqua-pop__seg aqua-pop__seg--step">
+        <span class="aqua-pop__pair">
+          <span class="aqua-pop__arrow aqua-pop__arrow--up"></span>
+          <span class="aqua-pop__arrow aqua-pop__arrow--down"></span>
+        </span>
+      </span>
+    </span>
+  </span>
+</div>
+
+<h2>Progress indeterminado</h2>
+<div>
+  <div class="aqua-progress" role="progressbar" aria-label="Cargando" aria-valuetext="En curso"></div>
+</div>
+
+<h2>Progress porcentual</h2>
+<div>
+  <div class="aqua-progress aqua-progress--determinate" role="progressbar"
+       aria-label="Instalación" aria-valuemin="0" aria-valuemax="100" aria-valuenow="68"
+       style="--aqua-progress-value:68%">
+    <span class="aqua-progress__fill" aria-hidden="true">
+      <span class="aqua-progress__motion"></span>
+    </span>
+    <span class="aqua-progress__label">68%</span>
+  </div>
+</div>
+
+<h2>Nested box</h2>
+<div class="aqua-box">
+  <div class="aqua-box__title">Cuenta</div>
+  <p>Preferencias de la cuenta</p>
+  <div class="aqua-box aqua-box--nested">
+    <div class="aqua-box__title">Privacidad</div>
+    <p>Controles agrupados dentro de otra caja</p>
+    <div class="aqua-box aqua-box--nested aqua-box--deep">
+      <div class="aqua-box__title">Avanzado</div>
+      <p>Las cajas se pueden anidar a varios niveles</p>
+    </div>
+  </div>
+</div>
+
+<h2>Text field</h2>
+<div>
+  <span class="aqua-field" style="--aqua-field-h:48px"><input class="aqua-field__input" type="text" placeholder="Escribe aquí"></span>
+</div>
+
+<h2>Slider</h2>
+<div>
+  <span class="aqua-slider" style="--aqua-slider-h:48px"><input class="aqua-slider__input" type="range" value="30"></span>
+  <span class="aqua-slider" style="--aqua-slider-h:48px"><input class="aqua-slider__input" type="range" value="70"></span>
+</div>
+<div>
+  <span class="aqua-slider aqua-slider--green" style="--aqua-slider-h:48px"><input class="aqua-slider__input" type="range" value="50"></span>
+  <span class="aqua-slider aqua-slider--red" style="--aqua-slider-h:48px"><input class="aqua-slider__input" type="range" value="50"></span>
+  <span class="aqua-slider aqua-slider--orange" style="--aqua-slider-h:48px"><input class="aqua-slider__input" type="range" value="50"></span>
+  <span class="aqua-slider aqua-slider--yellow" style="--aqua-slider-h:48px"><input class="aqua-slider__input" type="range" value="50"></span>
+  <span class="aqua-slider aqua-slider--blue" style="--aqua-slider-h:48px"><input class="aqua-slider__input" type="range" value="50"></span>
+  <span class="aqua-slider aqua-slider--magenta" style="--aqua-slider-h:48px"><input class="aqua-slider__input" type="range" value="50"></span>
+</div>
+
+<h2>Slider gota</h2>
+<div>
+  <span class="aqua-slider aqua-slider--drop" style="--aqua-slider-h:48px"><input class="aqua-slider__input" type="range" value="30"></span>
+  <span class="aqua-slider aqua-slider--drop" style="--aqua-slider-h:48px"><input class="aqua-slider__input" type="range" value="70"></span>
+</div>
+<div>
+  <span class="aqua-slider aqua-slider--drop aqua-slider--green" style="--aqua-slider-h:48px"><input class="aqua-slider__input" type="range" value="50"></span>
+  <span class="aqua-slider aqua-slider--drop aqua-slider--red" style="--aqua-slider-h:48px"><input class="aqua-slider__input" type="range" value="50"></span>
+  <span class="aqua-slider aqua-slider--drop aqua-slider--orange" style="--aqua-slider-h:48px"><input class="aqua-slider__input" type="range" value="50"></span>
+  <span class="aqua-slider aqua-slider--drop aqua-slider--yellow" style="--aqua-slider-h:48px"><input class="aqua-slider__input" type="range" value="50"></span>
+  <span class="aqua-slider aqua-slider--drop aqua-slider--blue" style="--aqua-slider-h:48px"><input class="aqua-slider__input" type="range" value="50"></span>
+  <span class="aqua-slider aqua-slider--drop aqua-slider--magenta" style="--aqua-slider-h:48px"><input class="aqua-slider__input" type="range" value="50"></span>
+</div>
+
+</body>
+</html>

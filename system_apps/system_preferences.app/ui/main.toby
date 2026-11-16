@@ -1,0 +1,53 @@
+<toby-app name="system-preferences">
+  <window title="System Preferences" width="600" height="430" mode="window" align="stretch">
+    <box padding="8" align="stretch" background="#D8D8D8" bordered="false" grow="1">
+      <column padding="4" spacing="2" align="stretch" grow="1">
+        <label id="window_inset" text=" " size="8" height="18"/>
+
+        <label id="heading_personal" text="Personal" size="14" bold="true" height="17"/>
+        <row spacing="1" align="center">
+          <column width="80" height="72" align="center"><image src="/system/apps/system_preferences.app/img/preferences/appearance.png" width="40" height="40" fit="contain"/><label id="name_appearance" text="Appearance" size="12" align="center" height="26"/></column>
+          <column width="80" height="72" align="center"><image src="/system/apps/system_preferences.app/img/preferences/desktop_screen_saver.png" width="40" height="40" fit="contain"/><label id="name_desktop_saver" text="Desktop &amp;&#10;Screen Saver" size="12" align="center" height="26"/></column>
+          <column width="80" height="72" align="center"><image src="/system/apps/system_preferences.app/img/preferences/dock.png" width="40" height="40" fit="contain"/><label id="name_dock" text="Dock" size="12" align="center" height="26"/></column>
+          <column width="80" height="72" align="center"><image src="/system/apps/system_preferences.app/img/preferences/expose.png" width="40" height="40" fit="contain"/><label id="name_expose" text="Exposé" size="12" align="center" height="26"/></column>
+          <column width="80" height="72" align="center"><image src="/system/apps/system_preferences.app/img/preferences/international.png" width="40" height="40" fit="contain"/><label id="name_international" text="International" size="12" align="center" height="26"/></column>
+          <column width="80" height="72" align="center"><image src="/system/apps/system_preferences.app/img/preferences/security.png" width="40" height="40" fit="contain"/><label id="name_security" text="Security" size="12" align="center" height="26"/></column>
+        </row>
+        <box height="2" background="#D8D8D8" bordered="false"/>
+        <box x="-12" y="113" width="600" height="2" background="#A6A6A6" bordered="false"/>
+
+        <label id="heading_hardware" text="Hardware" size="14" bold="true" height="17"/>
+        <row spacing="1" align="center">
+          <column width="80" height="72" align="center"><image src="/system/apps/system_preferences.app/img/preferences/bluetooth.png" width="40" height="40" fit="contain"/><label id="name_bluetooth" text="Bluetooth" size="12" align="center" height="26"/></column>
+          <column width="80" height="72" align="center"><image src="/system/apps/system_preferences.app/img/preferences/cds_dvds.png" width="40" height="40" fit="contain"/><label id="name_cds_dvds" text="CDs &amp;&#10;DVDs" size="12" align="center" height="26"/></column>
+          <column width="80" height="72" align="center"><image src="/system/apps/system_preferences.app/img/preferences/displays.png" width="40" height="40" fit="contain"/><label id="name_displays" text="Displays" size="12" align="center" height="26"/></column>
+          <column width="80" height="72" align="center"><image src="/system/apps/system_preferences.app/img/preferences/energy_saver.png" width="40" height="40" fit="contain"/><label id="name_energy_saver" text="Energy Saver" size="12" align="center" height="26"/></column>
+          <column width="80" height="72" align="center"><image src="/system/apps/system_preferences.app/img/preferences/keyboard_mouse.png" width="40" height="40" fit="contain"/><label id="name_keyboard_mouse" text="Keyboard &amp;&#10;Mouse" size="12" align="center" height="26"/></column>
+          <column width="80" height="72" align="center"><image src="/system/apps/system_preferences.app/img/preferences/print_fax.png" width="40" height="40" fit="contain"/><label id="name_print_fax" text="Print &amp;&#10;Fax" size="12" align="center" height="26"/></column>
+          <column width="80" height="72" align="center"><image src="/system/apps/system_preferences.app/img/preferences/sound.png" width="40" height="40" fit="contain"/><label id="name_sound" text="Sound" size="12" align="center" height="26"/></column>
+        </row>
+        <box height="2" background="#D8D8D8" bordered="false"/>
+        <box x="-12" y="210" width="600" height="2" background="#A6A6A6" bordered="false"/>
+
+        <label id="heading_network" text="Internet &amp; Network" size="14" bold="true" height="17"/>
+        <row spacing="1" align="center">
+          <column width="80" height="72" align="center"><image src="/system/apps/system_preferences.app/img/preferences/mac.png" width="40" height="40" fit="contain"/><label id="name_mac" text=".Mac" size="12" align="center" height="26"/></column>
+          <column width="80" height="72" align="center"><image src="/system/apps/system_preferences.app/img/preferences/network.png" width="40" height="40" fit="contain"/><label id="name_network" text="Network" size="12" align="center" height="26"/></column>
+          <column width="80" height="72" align="center"><image src="/system/apps/system_preferences.app/img/preferences/quicktime.png" width="40" height="40" fit="contain"/><label id="name_quicktime" text="QuickTime" size="12" align="center" height="26"/></column>
+          <column width="80" height="72" align="center"><image src="/system/apps/system_preferences.app/img/preferences/sharing.png" width="40" height="40" fit="contain"/><label id="name_sharing" text="Sharing" size="12" align="center" height="26"/></column>
+        </row>
+        <box height="2" background="#D8D8D8" bordered="false"/>
+        <box x="-12" y="307" width="600" height="2" background="#A6A6A6" bordered="false"/>
+
+        <label id="heading_system" text="System" size="14" bold="true" height="17"/>
+        <row spacing="1" align="center">
+          <column width="80" height="72" align="center"><image src="/system/apps/system_preferences.app/img/preferences/accounts.png" width="40" height="40" fit="contain"/><label id="name_accounts" text="Accounts" size="12" align="center" height="26"/></column>
+          <column width="80" height="72" align="center"><image src="/system/apps/system_preferences.app/img/preferences/date_time.png" width="40" height="40" fit="contain"/><label id="name_date_time" text="Date &amp;&#10;Time" size="12" align="center" height="26"/></column>
+          <column width="80" height="72" align="center"><image src="/system/apps/system_preferences.app/img/preferences/software_update.png" width="40" height="40" fit="contain"/><label id="name_software_update" text="Software&#10;Update" size="12" align="center" height="26"/></column>
+          <column width="80" height="72" align="center"><image src="/system/apps/system_preferences.app/img/preferences/speech.png" width="40" height="40" fit="contain"/><label id="name_speech" text="Speech" size="12" align="center" height="26"/></column>
+          <column width="80" height="72" align="center"><image src="/system/apps/system_preferences.app/img/preferences/universal_access.png" width="40" height="40" fit="contain"/><label id="name_universal_access" text="Universal&#10;Access" size="12" align="center" height="26"/></column>
+        </row>
+      </column>
+    </box>
+  </window>
+</toby-app>

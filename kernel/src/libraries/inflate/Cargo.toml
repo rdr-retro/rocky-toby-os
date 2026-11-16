@@ -1,0 +1,9 @@
+[package]
+name = "inflate"
+version = "0.1.0"
+edition = "2021"
+description = "Descompresor DEFLATE (RFC 1951) y zlib (RFC 1950) en no_std, para rocky"
+
+[lib]
+name = "inflate"
+path = "src/lib.rs"

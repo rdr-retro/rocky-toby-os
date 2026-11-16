@@ -1,0 +1,68 @@
+[package]
+name = "rocky-programas"
+version = "0.1.0"
+edition = "2021"
+description = "Programas de usuario de rocky: binarios ELF64 nativos que viven en /bin y se cargan desde el disco"
+
+# Cada programa es un binario independiente. No hay `src/main.rs`: todos son
+# `[[bin]]` explicitos y comparten el modulo `comun.rs`.
+autobins = false
+
+[profile.release]
+panic = "abort"
+opt-level = 2
+lto = true
+codegen-units = 1
+debug = false
+
+[[bin]]
+name = "usuario"
+path = "src/usuario.rs"
+
+[[bin]]
+name = "hola"
+path = "src/hola.rs"
+
+[[bin]]
+name = "fork"
+path = "src/fork.rs"
+
+[[bin]]
+name = "exec"
+path = "src/exec.rs"
+
+[[bin]]
+name = "fd"
+path = "src/fd.rs"
+
+[[bin]]
+name = "excepcion"
+path = "src/excepcion.rs"
+
+[[bin]]
+name = "memoria"
+path = "src/memoria.rs"
+
+[[bin]]
+name = "pipe"
+path = "src/pipe.rs"
+
+[[bin]]
+name = "senal"
+path = "src/senal.rs"
+
+[[bin]]
+name = "tty"
+path = "src/tty.rs"
+
+[[bin]]
+name = "cwd"
+path = "src/cwd.rs"
+
+[[bin]]
+name = "fs3"
+path = "src/fs3.rs"
+
+[[bin]]
+name = "kira_test"
+path = "src/kira_test.rs"

@@ -1,0 +1,5 @@
+<toby-app name="terminal">
+  <window title="Terminal" mode="window" width="720" height="440">
+    <column padding="0"/>
+  </window>
+</toby-app>

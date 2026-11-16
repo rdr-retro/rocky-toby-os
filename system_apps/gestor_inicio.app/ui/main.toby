@@ -1,0 +1,12 @@
+<toby-app name="gestor_inicio">
+  <window title="Gestor de inicio" width="620" height="360" align="stretch">
+    <column padding="22" spacing="12">
+      <button id="titulo" title="Aplicaciones al inicio" variant="blue" enabled="false"/>
+      <button id="sistema" title="Sistema: Kira y gráficos se inicializan primero" variant="white" enabled="false"/>
+      <button id="orden" title="Después: apps de sistema por prioridad, luego apps de usuario" variant="white" enabled="false"/>
+      <button id="gestor" title="Gestor de inicio — configuración persistente" variant="green" enabled="false"/>
+      <button id="ayuda" title="Usa inicio para listar y cambiar las apps automáticas" variant="white" enabled="false"/>
+      <button id="cerrar" title="Cerrar esta vista y volver al escritorio" variant="red" enabled="false"/>
+    </column>
+  </window>
+</toby-app>

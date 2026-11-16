@@ -1,0 +1,101 @@
+/* Textura móvil: indeterminate usa su pieza rayada; el modo porcentual usa
+   el fragmento central de 9 × 16 px extraído de loader.png. */
+.aqua-progress {
+  display: inline-block;
+  box-sizing: border-box;
+  width: 180px;
+  height: 18px;
+  overflow: hidden;
+  border: 1px solid #c9ced4;
+  background-color: #e6e8eb;
+  background-image: url("indeterminate.png");
+  background-repeat: repeat-x;
+  background-position: 0 0;
+  animation: aqua-progress-indeterminate 900ms linear infinite;
+  vertical-align: middle;
+}
+
+@keyframes aqua-progress-indeterminate {
+  to { background-position-x: -32px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aqua-progress,
+  .aqua-progress__motion { animation-duration: 4s; }
+}
+
+/* Variante porcentual: conserva el tamaño completo de la pieza azul y revela
+   sólo la fracción alcanzada, sin deformar su brillo. */
+.aqua-progress--determinate {
+  position: relative;
+  height: 16px;
+  border: 0;
+  background: none;
+  animation: none;
+}
+
+.aqua-progress--determinate::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: 0 solid transparent;
+  border-width: 0 4px;
+  border-image-source: url("loader_back.png");
+  border-image-slice: 0 4 0 4 fill;
+  border-image-width: 0 4px;
+  border-image-repeat: stretch;
+  pointer-events: none;
+}
+
+.aqua-progress__fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border-style: solid;
+  border-width: 0 4px;
+  border-color: transparent;
+  border-image-source: url("loader.png");
+  border-image-slice: 0 4 0 4 fill;
+  border-image-width: 0 4px;
+  border-image-repeat: stretch;
+  clip-path: inset(0 calc(100% - var(--aqua-progress-value, 0%)) 0 0);
+}
+
+.aqua-progress__motion {
+  position: absolute;
+  /* El containing block empieza después del borde 3-slice: extiéndelo 4 px
+     por ambos lados para animar también las tapas, incluido el comienzo. */
+  left: -4px;
+  right: -4px;
+  top: 0;
+  bottom: 0;
+  background-image: url("loader_center.png");
+  background-repeat: repeat-x;
+  background-position: 0 0;
+  /* 900 ms * (9 px / 32 px): igual velocidad lineal que indeterminate. */
+  animation: aqua-progress-determinate 253.125ms linear infinite;
+  pointer-events: none;
+}
+
+@keyframes aqua-progress-determinate {
+  to { background-position-x: -9px; }
+}
+
+.aqua-progress__label {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1d2a39;
+  font: 10px/1 "SF Pro Text", "Helvetica Neue", sans-serif;
+  pointer-events: none;
+}

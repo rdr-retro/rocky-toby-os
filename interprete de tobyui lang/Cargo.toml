@@ -1,0 +1,15 @@
+[package]
+name = "interprete-tobyui"
+version = "0.1.0"
+edition = "2021"
+description = "Anfitrion de Toby UI para Windows: abre una ventana y pinta un documento .toby (composicion de botones)."
+publish = false
+
+# El unico crate externo es el descodificador PNG del propio rocky (no_std y
+# sin dependencias), que es el mismo que usa el kernel para el kit AQUA.
+[dependencies]
+png = { path = "../kernel/src/libraries/png" }
+toby-appkit = { path = "../kernel/src/libraries/toby_appkit" }
+
+# Crate suelto: no forma parte de ningun workspace.
+[workspace]

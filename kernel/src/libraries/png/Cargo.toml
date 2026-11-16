@@ -1,0 +1,12 @@
+[package]
+name = "png"
+version = "0.1.0"
+edition = "2021"
+description = "Lector de PNG (RFC 2083) en no_std, para rocky"
+
+[dependencies]
+inflate = { path = "../inflate" }
+
+[lib]
+name = "png"
+path = "src/lib.rs"

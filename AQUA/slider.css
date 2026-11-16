@@ -1,0 +1,171 @@
+/* ==========================================================================
+   SLIDER AQUA · pulgar centrado dentro de la pista
+   --------------------------------------------------------------------------
+   Es un <input type="range"> real: el navegador mueve el pulgar, así que no
+   hace falta nada de JS. Se le quita la apariencia nativa y la piel la ponen
+   las piezas PNG:
+
+       pista (3 cortes, como el segmented)
+         izquierda : graybar_ left.png   (extremo redondeado)
+         cuerpo    : graybar_body.png    (se estira)
+         derecha   : graybar_ right.png  (extremo redondeado)
+
+       pulgar (centrado sobre el eje de la pista)
+         esfera : blue_radio.png    (variante por defecto)
+         gota   : slider_thumb.png  (con .aqua-slider--drop)
+
+   El input mide --aqua-slider-h. La pista y el pulgar miden ambos 55 % del
+   control, así el pulgar queda contenido por completo en la barra.
+   ========================================================================== */
+
+.aqua-slider {
+  /* Alto total del control. */
+  --aqua-slider-h: 26px;
+  /* Ancho del control. */
+  --aqua-slider-w: 240px;
+  /* Pista suficientemente alta para contener el pulgar. */
+  --aqua-slider-track: calc(var(--aqua-slider-h) * .55);
+  /* Ancho de cada extremo: conserva la escala del PNG (168 de 298 de alto). */
+  --aqua-slider-cap: calc(var(--aqua-slider-track) * 168 / 298);
+  /* Altura del pulgar: coincide con la pista para quedar dentro de ella. */
+  --aqua-slider-thumb: .55;
+  --aqua-slider-thumb-h: calc(var(--aqua-slider-h) * var(--aqua-slider-thumb));
+  /* Pulgar por defecto: la esfera (blue_radio.png, 682 x 653). */
+  --aqua-slider-thumb-w: calc(var(--aqua-slider-thumb-h) * 682 / 653);
+  /* Pulgar: la esfera (azul por defecto) o la gota con --drop; y el tinte de
+     su sombra. Las variantes de color están al final del fichero. */
+  --aqua-slider-thumb-img: url("blue_radio.png");
+  --aqua-slider-thumb-drop: url("slider_thumb.png");
+  --aqua-slider-shadow: 5, 30, 64;
+
+  display: inline-flex;
+  align-items: flex-start;
+  vertical-align: middle;
+}
+
+/* variante gota (slider_thumb.png, 404 x 371) */
+.aqua-slider--drop {
+  --aqua-slider-thumb-w: calc(var(--aqua-slider-thumb-h) * 404 / 371);
+}
+
+/* --- input nativo --- */
+.aqua-slider__input {
+  -webkit-appearance: none;
+  appearance: none;
+  box-sizing: content-box;
+  width: var(--aqua-slider-w);
+  /* La caja completa centra verticalmente la pista y el pulgar. */
+  height: var(--aqua-slider-h);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* --- la pista: [extremo izq] + [cuerpo estirado] + [extremo der] --- */
+.aqua-slider__input::-webkit-slider-runnable-track {
+  height: var(--aqua-slider-track);
+  border: 0;
+  background-image:
+    url("graybar_ left.png"),
+    url("graybar_body.png"),
+    url("graybar_ right.png");
+  background-repeat: no-repeat;
+  background-position: left top, center top, right top;
+  background-size:
+    var(--aqua-slider-cap) 100%,
+    max(0px, calc(100% - var(--aqua-slider-cap) * 2)) 100%,
+    var(--aqua-slider-cap) 100%;
+}
+
+/* --- el pulgar: centrado verticalmente en la pista --- */
+.aqua-slider__input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: var(--aqua-slider-thumb-w);
+  height: var(--aqua-slider-thumb-h);
+  border: 0;
+  background-image: var(--aqua-slider-thumb-img);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  margin-top: calc((var(--aqua-slider-track) - var(--aqua-slider-thumb-h)) / 2);
+  filter: drop-shadow(0 1px 2px rgba(var(--aqua-slider-shadow), .40));
+  transition: filter .16s ease, transform .12s ease;
+}
+
+.aqua-slider--drop .aqua-slider__input::-webkit-slider-thumb {
+  background-image: var(--aqua-slider-thumb-drop);
+}
+
+/* --- estados --- */
+.aqua-slider__input:hover::-webkit-slider-thumb {
+  filter: brightness(1.08) saturate(1.05) drop-shadow(0 2px 4px rgba(var(--aqua-slider-shadow), .45));
+}
+
+.aqua-slider__input:active::-webkit-slider-thumb {
+  transform: scale(.94);
+}
+
+.aqua-slider:has(.aqua-slider__input:focus-visible) {
+  outline: 3px solid #8fd0ff;
+  outline-offset: 3px;
+  border-radius: 999px;
+}
+
+.aqua-slider:has(.aqua-slider__input:disabled) {
+  cursor: not-allowed;
+  opacity: .55;
+}
+
+.aqua-slider__input:disabled {
+  cursor: not-allowed;
+}
+
+.aqua-slider__input:disabled::-webkit-slider-thumb {
+  filter: grayscale(.7) drop-shadow(0 1px 2px rgba(var(--aqua-slider-shadow), .3));
+}
+
+.aqua-slider__input:disabled:hover::-webkit-slider-thumb {
+  filter: grayscale(.7) drop-shadow(0 1px 2px rgba(var(--aqua-slider-shadow), .3));
+  transform: none;
+}
+
+/* --- Firefox centra el pulgar en la pista de forma nativa --- */
+.aqua-slider__input::-moz-range-track {
+  height: var(--aqua-slider-track);
+  border: 0;
+  background-image:
+    url("graybar_ left.png"),
+    url("graybar_body.png"),
+    url("graybar_ right.png");
+  background-repeat: no-repeat;
+  background-position: left top, center top, right top;
+  background-size:
+    var(--aqua-slider-cap) 100%,
+    max(0px, calc(100% - var(--aqua-slider-cap) * 2)) 100%,
+    var(--aqua-slider-cap) 100%;
+}
+
+.aqua-slider__input::-moz-range-thumb {
+  width: var(--aqua-slider-thumb-w);
+  height: var(--aqua-slider-thumb-h);
+  border: 0;
+  background: var(--aqua-slider-thumb-img) center / 100% 100% no-repeat;
+  margin-top: 0;
+}
+
+.aqua-slider--drop .aqua-slider__input::-moz-range-thumb {
+  background-image: var(--aqua-slider-thumb-drop);
+}
+
+/* --- variantes de color ---------------------------------------------------
+   El pulgar con el tono girado (las piezas las genera recolorear.py): sirve
+   tanto para la esfera como para la gota (--drop). La pista gris no cambia. */
+.aqua-slider--blue    { --aqua-slider-thumb-img: url("blue_radio.png");         --aqua-slider-thumb-drop: url("slider_thumb.png"); }
+.aqua-slider--green   { --aqua-slider-thumb-img: url("green_radio.png");        --aqua-slider-thumb-drop: url("slider_thumb_green.png");   --aqua-slider-shadow: 12, 74, 34; }
+.aqua-slider--red     { --aqua-slider-thumb-img: url("red_radio.png");          --aqua-slider-thumb-drop: url("slider_thumb_red.png");     --aqua-slider-shadow: 104, 12, 12; }
+.aqua-slider--orange  { --aqua-slider-thumb-img: url("orange_radio.png");       --aqua-slider-thumb-drop: url("slider_thumb_orange.png");  --aqua-slider-shadow: 116, 60, 6; }
+.aqua-slider--yellow  { --aqua-slider-thumb-img: url("yellow_radio.png");       --aqua-slider-thumb-drop: url("slider_thumb_yellow.png");  --aqua-slider-shadow: 122, 96, 10; }
+.aqua-slider--magenta { --aqua-slider-thumb-img: url("magenta_radio.png");      --aqua-slider-thumb-drop: url("slider_thumb_magenta.png"); --aqua-slider-shadow: 104, 12, 92; }

@@ -1,0 +1,7 @@
+<app nombre="terminal" version="1.0">
+  <identidad titulo="Terminal" icono="img/terminal.png"/>
+  <ui principal="ui/terminal.toby"/>
+  <codigo lenguaje="rust" fuente="code/src/main.rs" binario="code/app.elf"/>
+  <inicio clase="sistema" automatico="false" prioridad="100"/>
+  <capacidades/>
+</app>

@@ -1,0 +1,7 @@
+<!-- Toby AppKit: diseno generado automaticamente. -->
+<toby-app name="diseno">
+  <window title="Diseno" width="480" height="300">
+    <stack width="480" height="300">
+    </stack>
+  </window>
+</toby-app>

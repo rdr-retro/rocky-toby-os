@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Especificación Toby UI — Lenguaje declarativo para Rocky OS</title>
+<style>
+  :root { --bg:#fff; --fg:#1f1f1f; --muted:#4f4f4f; --code:#f6f8fa; --border:#d0d7de; --link:#0969da; }
+  body { font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; color:var(--fg); background:var(--bg); margin:0; }
+  header { padding: 32px 24px; border-bottom:1px solid var(--border); }
+  main { max-width: 1100px; margin: 0 auto; padding: 24px; }
+  nav { position: sticky; top:0; background:var(--bg); border-bottom:1px solid var(--border); z-index:10; }
+  nav ul { display:flex; flex-wrap:wrap; gap:16px; list-style:none; margin:0; padding:12px 24px; max-width:1100px; }
+  nav a { text-decoration:none; color:var(--muted); }
+  nav a:hover { color:var(--link); }
+  h1,h2,h3,h4 { line-height:1.25; }
+  h1 { margin:0 0 8px; font-size:32px; }
+  h2 { margin:48px 0 16px; font-size:24px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+  h3 { margin:32px 0 12px; font-size:20px; }
+  h4 { margin:24px 0 8px; font-size:18px; }
+  p, ul, ol { margin:12px 0; }
+  pre, code { font: 14px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  pre { background:var(--code); border:1px solid var(--border); border-radius:8px; padding:16px; overflow:auto; }
+  code { background:var(--code); padding:2px 6px; border-radius:6px; }
+  table { border-collapse:collapse; width:100%; margin:16px 0; }
+  th, td { border:1px solid var(--border); padding:8px 12px; text-align:left; vertical-align:top; }
+  th { background:var(--code); }
+  .muted { color:var(--muted); }
+  .note { background:#f6f8fa; border-left:4px solid #1f6feb; padding:12px 16px; border-radius:6px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Toby UI — Especificación del lenguaje declarativo para Rocky OS</h1>
+  <p class="muted">Versión 1.0 · Orientado a <code>x86_64 bare-metal</code> (Rust, <code>no_std + alloc</code>)</p>
+</header>
+<nav>
+  <ul>
+    <li><a href="#objetivo">Objetivo</a></li>
+    <li><a href="#principios">Principios</a></li>
+    <li><a href="#diferenciacion">Diferenciación TobyUI vs Toby UI</a></li>
+    <li><a href="#modulos">Módulos</a></li>
+    <li><a href="#gramatica">Gramática</a></li>
+    <li><a href="#componentes">Componentes</a></li>
+    <li><a href="#props">Propiedades</a></li>
+    <li><a href="#layout">Layout</a></li>
+    <li><a href="#tema">Tema y nine-slice</a></li>
+    <li><a href="#recursos">Recursos</a></li>
+    <li><a href="#renderer">Renderer</a></li>
+    <li><a href="#eventos">Eventos y foco</a></li>
+    <li><a href="#acciones">Acciones</a></li>
+    <li><a href="#validacion">Validación</a></li>
+    <li><a href="#integracion">Integración Rocky</a></li>
+    <li><a href="#prohibiciones">Prohibiciones</a></li>
+    <li><a href="#fases">Plan por fases</a></li>
+    <li><a href="#ca">Criterios aceptación</a></li>
+  </ul>
+</nav>
+<main>
+
+<section id="objetivo">
+<h2>1. Objetivo</h2>
+<p>Toby UI es un <strong>lenguaje declarativo propio</strong> para describir interfaces gráficas en <strong>Rocky OS</strong> (kernel x86_64 bare-metal en Rust). Describe <strong>qué</strong> debe aparecer y <strong>cómo</strong> organizarse, nunca <strong>cómo</strong> ejecutar lógica.</p>
+<p>El runtime interpretará documentos <code>.toby</code>, calculará layout, aplicará tema, dibujará sobre framebuffer VESA y gestionará eventos/acciones registradas <strong>sin ejecutar código arbitrario</strong>.</p>
+</section>
+
+<section id="principios">
+<h2>2. Principios fundamentales</h2>
+<ul>
+  <li><strong>Declarativo</strong>: solo estructura, propiedades, distribución, recursos y referencias a acciones.</li>
+  <li><strong>Separación</strong>: estructura (documento) ≠ apariencia (tema) ≠ presentación (renderer) ≠ comportamiento (eventos/acciones).</li>
+  <li><strong>Tipado</strong>: todas las propiedades validadas por tipo (<code>int</code>, <code>bool</code>, <code>string</code>, <code>enum</code>).</li>
+  <li><strong>Seguro</strong>: sin eval, bucles, condicionales generales, funciones, scripts ni acceso libre a sistema.</li>
+  <li><strong>Determinista</strong>: layout reproducible con mismos datos.</li>
+  <li><strong>Minimalista</strong>: basado en lo realmente usado (coincide con kit AQUA).</li>
+  <li><strong>Bare-metal friendly</strong>: <code>no_std + alloc</code>, sin dependencias pesadas.</li>
+</ul>
+</section>
+
+<section id="diferenciacion">
+<h2>3. Diferenciación: TobyUI (runtime) vs Toby UI (lenguaje)</h2>
+<table>
+<thead><tr><th>Concepto</th><th>Ubicación</th><th>Descripción</th></tr></thead>
+<tbody>
+<tr><td><strong>TobyUI (runtime)</strong></td><td><code>kernel/src/gui.rs</code>, <code>wm.rs</code>, <code>term.rs</code>, <code>cursor.rs</code></td><td>Escritorio gráfico ya existente. Ventanas, foco, z-order, barra de tareas, menú inicio, terminal embebido, composición.</td></tr>
+<tr><td><strong>Toby UI (lenguaje)</strong></td><td><code>kernel/src/toby_ui/</code> (nuevo)</td><td>Lenguaje declarativo para describir interfaces reutilizables. Parser, modelo tipado, layout, tema, renderer, eventos, acciones.</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="modulos">
+<h2>4. Estructura de módulos</h2>
+<p>Se creará el directorio <code>kernel/src/toby_ui/</code> con los siguientes archivos:</p>
+<pre><code>kernel/src/toby_ui/
+├── mod.rs
+├── parser.rs      // Léxico + sintáctico + análisis
+├── document.rs    // Modelo de documento validado
+├── component.rs   // Componentes, defs y tabla
+├── layout.rs       // Motor de layout propio
+├── theme.rs        // Temas + nine-slice
+├── resource.rs     // Carga PNG/BMP + validación rutas
+├── renderer.rs     // Trait Renderer + CanvasRenderer
+├── event.rs        // Eventos, foco, estados
+├── action.rs       // ActionRegistry seguro
+└── validation.rs   // Validación semántica</code></pre>
+<p>En <code>kernel/src/main.rs</code> se añadirá:</p>
+<pre><code>mod toby_ui;</code></pre>
+</section>
+
+<section id="gramatica">
+<h2>5. Gramática conceptual</h2>
+<p>Formato XML-like minimalista, sin namespaces, sin atributos dinámicos.</p>
+<h3>5.1 Documento mínimo</h3>
+<pre><code>&lt;toby-app name="settings"&gt;
+  &lt;window title="Configuración" width="640" height="420"&gt;
+    &lt;column spacing="12" padding="20"&gt;
+      &lt;box id="account" title="Cuenta"&gt;
+        &lt;button id="profile" title="Editar perfil"/&gt;
+        &lt;box id="privacy" title="Privacidad"&gt;
+          &lt;button id="permissions" title="Permisos"/&gt;
+        &lt;/box&gt;
+      &lt;/box&gt;
+      &lt;button id="save" title="Guardar" action="settings.save"/&gt;
+    &lt;/column&gt;
+  &lt;/window&gt;
+&lt;/toby-app&gt;</code></pre>
+<h3>5.2 Reglas sintácticas</h3>
+<ul>
+  <li>Raíz obligatoria: <code>&lt;toby-app&gt;</code></li>
+  <li>Elementos autocerrados o con hijos según componente</li>
+  <li>Atributos <code>key="valor"</code> (comillas dobles)</li>
+  <li>Valores numéricos enteros (px implícitos)</li>
+  <li>Valores booleanos <code>true/false</code></li>
+  <li>Identificadores <code>id</code> y claves <code>action</code> con formato <code>[a-zA-Z][a-zA-Z0-9_.-]*</code></li>
+  <li>Sin comentarios XML arbitrarios o se limitarán</li>
+  <li>UTF-8</li>
+</ul>
+<h3>5.3 Tipos de propiedad</h3>
+<table>
+<thead><tr><th>Tipo</th><th>Ejemplos</th><th>Notas</th></tr></thead>
+<tbody>
+<tr><td><code>int</code></td><td><code>width="640"</code>, <code>spacing="12"</code></td><td>Entero no negativo (salvo casos justificados)</td></tr>
+<tr><td><code>bool</code></td><td><code>enabled="true"</code>, <code>visible="false"</code></td><td>true/false</td></tr>
+<tr><td><code>string</code></td><td><code>title="Guardar"</code></td><td>Texto literal</td></tr>
+<tr><td><code>enum</code></td><td><code>weight="bold"</code>, <code>align="center"</code></td><td>Valores cerrados por componente</td></tr>
+<tr><td><code>color</code></td><td><code>color="#0a2e52"</code></td><td>RGB hex (#RRGGBB) inicial</td></tr>
+<tr><td><code>idref</code></td><td><code>group="grp1"</code></td><td>Referencia a id existente</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="componentes">
+<h2>6. Componentes iniciales</h2>
+<table>
+<thead><tr><th>Componente</th><th>Tipo</th><th>Descripción</th></tr></thead>
+<tbody>
+<tr><td><code>toby-app</code></td><td>Raíz</td><td>Contenedor de aplicación. Requiere al menos <code>window</code>.</td></tr>
+<tr><td><code>window</code></td><td>Contenedor</td><td>Ventana lógica con <code>title,width,height</code>.</td></tr>
+<tr><td><code>box</code></td><td>Contenedor</td><td>Caja con el título en una banda exterior sobre el marco; admite cajas y controles anidados.</td></tr>
+<tr><td><code>column</code></td><td>Layout</td><td>Distribución vertical con <code>spacing</code>, <code>padding</code>, <code>align</code>.</td></tr>
+<tr><td><code>row</code></td><td>Layout</td><td>Distribución horizontal con <code>spacing</code>, <code>padding</code>, <code>align</code>.</td></tr>
+<tr><td><code>stack</code></td><td>Layout</td><td>Apilado en Z relativo (para solapes controlados).</td></tr>
+<tr><td><code>spacer</code></td><td>Layout helper</td><td>Ocupa espacio flexible.</td></tr>
+<tr><td><code>text</code></td><td>Visual</td><td>Texto estático.</td></tr>
+<tr><td><code>label</code></td><td>Visual</td><td>Etiqueta asociada a control.</td></tr>
+<tr><td><code>progress</code></td><td>Visual</td><td><code>mode="indeterminate"</code> anima <code>indeterminate.png</code>; <code>mode="determinate" value="0…100"</code> compone <code>loader_back.png</code> y <code>loader.png</code> en 3-slice (extremos de 4 px fijos, centro escalable) con porcentaje visible. Sólo el primero solicita fotogramas.</td></tr>
+<tr><td><code>button</code></td><td>Interactivo</td><td>Botón recto (coincide con <code>aqua-btn</code>).</td></tr>
+<tr><td><code>circular-button</code></td><td>Interactivo</td><td>Botón redondo (reutiliza esfera radio sin punto).</td></tr>
+<tr><td><code>input</code></td><td>Interactivo</td><td>Campo de texto (text field).</td></tr>
+<tr><td><code>checkbox</code></td><td>Interactivo</td><td>Casilla de verificación.</td></tr>
+<tr><td><code>radio</code></td><td>Interactivo</td><td>Botón de opción.</td></tr>
+<tr><td><code>radio-group</code></td><td>Contenedor lógico</td><td>Agrupa radios (obligatorio para selección exclusiva).</td></tr>
+<tr><td><code>segmented</code></td><td>Interactivo</td><td>Control segmentado.</td></tr>
+<tr><td><code>stepper</code></td><td>Interactivo</td><td>Stepper Control con opciones y flechas; conserva el comportamiento actual. <code>popup</code> se mantiene como alias compatible.</td></tr>
+<tr><td><code>list</code></td><td>Contenedor</td><td>Lista vertical de ítems.</td></tr>
+<tr><td><code>list-item</code></td><td>Interactivo</td><td>Elemento seleccionable.</td></tr>
+<tr><td><code>separator</code></td><td>Visual</td><td>Separador horizontal/vertical.</td></tr>
+<tr><td><code>image</code></td><td>Visual</td><td>Imagen PNG/BMP desde recurso autorizado.</td></tr>
+<tr><td><code>slider</code></td><td>Interactivo</td><td>Slider (esfera o gota).</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="props">
+<h2>7. Propiedades por componente (resumen)</h2>
+<table>
+<thead><tr><th>Componente</th><th>Propiedades relevantes</th></tr></thead>
+<tbody>
+<tr><td><code>toby-app</code></td><td><code>name</code> (string, req)</td></tr>
+<tr><td><code>window</code></td><td><code>title</code> (string), <code>width</code> (int, req), <code>height</code> (int, req), <code>resizable</code> (bool)</td></tr>
+<tr><td><code>column/row</code></td><td><code>spacing</code> (int), <code>padding</code> (int|4-vals), <code>align</code> (start|center|end|stretch), <code>gap</code> (int)</td></tr>
+<tr><td><code>box</code></td><td><code>id</code>, <code>title</code>, <code>padding</code> (16 px por defecto), <code>spacing</code>, <code>width</code>, <code>height</code>, <code>align</code>, <code>grow</code></td></tr>
+<tr><td><code>text/label</code></td><td><code>value</code> (string), <code>size</code> (int), <code>weight</code> (normal|bold), <code>color</code> (color)</td></tr>
+<tr><td><code>progress</code></td><td><code>id</code>, <code>mode</code> (<code>indeterminate</code>|<code>determinate</code>, predeterminado <code>indeterminate</code>), <code>value</code> (0–100; requerido en modo porcentual), <code>width</code>, <code>height</code>, <code>x</code>, <code>y</code></td></tr>
+<tr><td><code>button</code></td><td><code>id</code> (id), <code>title</code> (string), <code>action</code> (actionref), <code>enabled</code> (bool), <code>variant</code> (blue|green|red|orange|yellow|magenta|white)</td></tr>
+<tr><td><code>circular-button</code></td><td>igual a button (más <code>size</code> int)</td></tr>
+<tr><td><code>input</code></td><td><code>id</code>, <code>placeholder</code>, <code>text</code>, <code>maxlen</code>, <code>enabled</code>, <code>readonly</code></td></tr>
+<tr><td><code>checkbox</code></td><td><code>id</code>, <code>label</code>, <code>checked</code> (bool), <code>enabled</code></td></tr>
+<tr><td><code>radio</code></td><td><code>id</code>, <code>label</code>, <code>value</code>, <code>checked</code>, <code>enabled</code></td></tr>
+<tr><td><code>segmented</code></td><td><code>id</code>, <code>value</code>, <code>items</code> (lista), <code>enabled</code></td></tr>
+<tr><td><code>popup</code></td><td><code>id</code>, <code>value</code>, <code>options</code>, <code>enabled</code></td></tr>
+<tr><td><code>slider</code></td><td><code>id</code>, <code>min</code>, <code>max</code>, <code>value</code>, <code>step</code>, <code>variant</code> (sphere|drop), <code>color</code></td></tr>
+<tr><td><code>image</code></td><td><code>src</code> (resource path autorizado), <code>width</code>, <code>height</code>, <code>fit</code> (contain|cover|stretch)</td></tr>
+</tbody>
+</table>
+<div class="note"><strong>Nota:</strong> <code>action</code> solo aparece en componentes interactivos. No se permiten atributos libres.</div>
+<p>Ejemplos: <code>&lt;progress id="cargando" mode="indeterminate"/&gt;</code> anima el patrón con el reloj del anfitrión; <code>&lt;progress id="instalacion" mode="determinate" value="68"/&gt;</code> muestra el porcentaje. <code>App::actualizar_progreso(id, valor)</code> actualiza el estado sin iniciar un timer.</p>
+</section>
+
+<section id="layout">
+<h2>8. Layout Engine (propio, determinista)</h2>
+<p>Motor propio, sin flexbox completo. Calcula <code>Rect(x,y,w,h)</code> absoluto por nodo.</p>
+<h3>8.1 Unidades</h3>
+<ul>
+  <li>Enteros en píxeles (px). No em, rem, %, vw/vh.</li>
+  <li><code>spacing</code>, <code>padding</code>, <code>margin</code>, <code>gap</code> en px.</li>
+</ul>
+<h3>8.2 Tamaños</h3>
+<ul>
+  <li><code>fixed</code>: <code>width/height</code> explícitos</li>
+  <li><code>auto</code>: se ajusta al contenido</li>
+  <li><code>fill</code>: ocupa espacio restante disponible</li>
+  <li>proporcionales (limitados) si se definieran más adelante</li>
+</ul>
+<h3>8.3 Alineación</h3>
+<ul>
+  <li><code>start</code>, <code>center</code>, <code>end</code>, <code>stretch</code></li>
+  <li>Aplica a eje cruzado/principal según <code>row/column</code></li>
+</ul>
+<h3>8.4 Reglas</h3>
+<ul>
+  <li>Padding/margin respetados</li>
+  <li>Spacing entre hijos</li>
+  <li>Contenedores anidados</li>
+  <li>Recorte implícito cuando convenga</li>
+  <li>Recalculable ante cambio de tamaño de ventana</li>
+  <li>Determinista (mismo árbol → mismo layout)</li>
+</ul>
+<h3>8.5 API conceptual</h3>
+<pre><code>pub struct Rect { pub x:i32,y:i32,w:u32,h:u32 }
+pub trait Layout {
+  fn compute(node:&ValidatedNode, constraints:&Constraints) -> ComputedLayout;
+}</code></pre>
+</section>
+
+<section id="tema">
+<h2>9. Tema y nine-slice</h2>
+<p>El tema separa apariencia de estructura. Permite reutilizar componentes con distintos temas.</p>
+<h3>9.1 Elementos del tema</h3>
+<ul>
+  <li>Imágenes PNG por estado (normal/hover/pressed/focused/selected/disabled)</li>
+  <li>Métricas (alturas, radios, caps, offsets)</li>
+  <li>Tipografías (inicialmente bitmap 8x8; extensible)</li>
+  <li>Colores (texto, fondo, bordes)</li>
+  <li>Bordes/esquinas</li>
+  <li>Padding interno</li>
+  <li>Sombra (trío RGB como en AQUA)</li>
+</ul>
+<h3>9.2 Estados visuales</h3>
+<table>
+<thead><tr><th>Estado</th><th>Uso</th></tr></thead>
+<tbody>
+<tr><td><code>normal</code></td><td>Estado por defecto</td></tr>
+<tr><td><code>hover</code></td><td>Ratón sobre componente</td></tr>
+<tr><td><code>pressed</code></td><td>Pulsado/activo</td></tr>
+<tr><td><code>focused</code></td><td>Enfocado (teclado)</td></tr>
+<tr><td><code>selected</code></td><td>Seleccionado (radio/check/segmented/list)</td></tr>
+<tr><td><code>disabled</code></td><td>Deshabilitado</td></tr>
+</tbody>
+</table>
+<h3>9.3 Nine-slice</h3>
+<p>Soporta slicing 3-part (ideal para piezas AQUA): <code>left</code>, <code>body</code>, <code>right</code>. También permite 9-slice completo. Las piezas se escalan solo el cuerpo, conservando proporción/extremos. Permite reutilizar <code>left_button_*.png</code>, <code>segmented_*_*.png</code>, <code>graybar_*.png</code>.</p>
+<pre><code>struct NineSlice { left: Rect, body: Rect, right: Rect, image: ResourceId }</code></pre>
+</section>
+
+<section id="recursos">
+<h2>10. Recursos (PNG/BMP)</h2>
+<ul>
+  <li>Carga vía <code>fs.rs</code> existente (runtime desde disco)</li>
+  <li>Ruta autorizada únicamente (sin <code>..</code>, sin acceso fuera de directorio de recursos)</li>
+  <li>Cache mínimo por <code>ResourceId</code></li>
+  <li>Decodificación con librería <code>png</code> interna (<code>kernel/src/libraries/png</code>) + <code>inflate</code></li>
+  <li>Soporte BMP para cursor/recursos puntuales</li>
+  <li>Validación de integridad mínima</li>
+  <li>Ruta sugerida: <code>/usr/share/tobyui/themes/default/</code> en <code>rockydisk.img</code></li>
+</ul>
+<pre><code>pub struct ResourceRef { pub id: String, pub src: String }
+pub enum ResourceKind { Png, Bmp }</code></pre>
+</section>
+
+<section id="renderer">
+<h2>11. Renderer (trait + implementación)</h2>
+<h3>11.1 Trait Renderer</h3>
+<p>Abstrae presentación. Layout calcula posiciones; renderer dibuja.</p>
+<pre><code>pub trait Renderer {
+  fn clear(&mut self, color: u32);
+  fn draw_rect(&mut self, x:i32,y:i32,w:u32,h:u32, style: &RectStyle);
+  fn draw_nineslice(&mut self, x:i32,y:i32,w:u32,h:u32, ns:&NineSliceRef, state: State);
+  fn draw_image(&mut self, x:i32,y:i32, img:&ImageRef, src: &Rect, tint: Option&lt;u32&gt;);
+  fn draw_text(&mut self, x:i32,y:i32, text:&str, font:&FontRef, color:u32);
+  fn push_clip(&mut self, rect: Rect);
+  fn pop_clip(&mut self);
+  fn present(&mut self);
+}</code></pre>
+<h3>11.2 CanvasRenderer</h3>
+<p>Implementación inicial sobre <code>gfx::Canvas</code>:</p>
+<ul>
+  <li>Usa <code>pixel</code>, <code>fill</code>, <code>rect</code>, <code>line</code>, <code>hline/vline</code></li>
+  <li><code>text8x8</code>/<code>char8x8</code> para texto inicial</li>
+  <li><code>dibujar_imagen</code>, <code>blit</code>, <code>blit_alpha</code></li>
+  <li>Respeta clip</li>
+  <li>Dibuja nine-slice descomponiendo en <code>left/body/right</code></li>
+</ul>
+<pre><code>pub struct CanvasRenderer&lt;'a&gt; { canvas: &amp;'a mut gfx::Canvas }</code></pre>
+<div class="note">Preparado para conectar con Kira en futuro, sin acoplar al runtime TobyUI.</div>
+</section>
+
+<section id="eventos">
+<h2>12. Sistema de eventos, foco y estados</h2>
+<h3>12.1 Eventos crudos → eventos Toby UI</h3>
+<p>Se convierten <code>input::poll()</code> y <code>mouse::poll()+mouse::tomar()</code> (igual que <code>gui.rs</code>) a eventos jerárquicos.</p>
+<h3>12.2 Tipos de evento</h3>
+<ul>
+  <li><code>MouseDown { x,y,button }</code>, <code>MouseUp { x,y,button }</code>, <code>MouseMove { x,y,dx,dy }</code></li>
+  <li><code>Click { x,y,button }</code></li>
+  <li><code>KeyDown { scancode,keycode }</code>, <code>KeyUp { ... }</code>, <code>Char { ch }</code></li>
+  <li><code>FocusGain</code>, <code>FocusLoss</code></li>
+  <li><code>HoverEnter</code>, <code>HoverLeave</code></li>
+</ul>
+<h3>12.3 Foco</h3>
+<ul>
+  <li>Cadena de foco jerárquica (focus chain)</li>
+  <li>Solo componentes enfocables reciben foco</li>
+  <li>Navegación por teclado lógica</li>
+  <li>Un solo componente enfocado a la vez</li>
+</ul>
+<h3>12.4 Estados derivados</h3>
+<p>Estado efectivo = <code>(enabled, hovered, pressed, focused, selected, disabled)</code> → determina skin/imagen del tema.</p>
+<h3>12.5 Enrutamiento</h3>
+<ul>
+  <li>Hit-test por posición tras layout (<code>point_in_rect</code>)</li>
+  <li>Prioridad al nodo más profundo bajo cursor</li>
+  <li>Eventos suben/bajan según necesidad</li>
+  <li>Click generado tras <code>MouseDown+MouseUp</code> sobre mismo nodo</li>
+</ul>
+</section>
+
+<section id="acciones">
+<h2>13. Action Registry (seguro)</h2>
+<h3>13.1 Principio</h3>
+<p><code>action="settings.save"</code> es <strong>únicamente una referencia</strong> a un handler registrado. El documento <strong>nunca</strong> define funciones.</p>
+<h3>13.2 Estructura</h3>
+<pre><code>pub type ActionHandler = fn(ctx: &amp;ActionCtx) -&gt; ActionResult;
+
+pub struct ActionCtx {
+  pub app_name: &amp;str,
+  pub node_id: Option&lt;&amp;str&gt;,
+  pub extra: &amp;[(&amp;str,&amp;str)],
+}
+
+pub enum ActionResult { Ok, Err(&amp;'static str) }
+
+pub struct ActionRegistry {
+  map: BTreeMap&lt;String, ActionHandler&gt;, // sin HashMap dinámico excesivo
+}</code></pre>
+<h3>13.3 Reglas</h3>
+<ul>
+  <li>Solo se pueden registrar handlers existentes en runtime</li>
+  <li>Resolución por clave exacta (<code>settings.save</code>)</li>
+  <li>Si <code>action</code> no existe → <strong>error controlado</strong> en validación o ejecución</li>
+  <li>Invocación explícita tras validación</li>
+  <li>Sin ejecución desde parser</li>
+  <li>Registro externo (proceso/runtime de Rocky)</li>
+</ul>
+</section>
+
+<section id="validacion">
+<h2>14. Validación</h2>
+<p><code>validation.rs</code> aplica reglas post-parseo sobre <code>ValidatedDocument</code>.</p>
+<table>
+<thead><tr><th>Regla</th><th>Descripción</th></tr></thead>
+<tbody>
+<tr><td>Sintaxis</td><td>Tokens válidos, etiquetas balanceadas</td></tr>
+<tr><td>Componente permitido</td><td>Solo <code>ComponentKind</code> conocidos</td></tr>
+<tr><td>Propiedades válidas</td><td>Por componente (tabla <code>ComponentDef</code>)</td></tr>
+<tr><td>Tipos</td><td>int/bool/string/enum/color/idref correctos</td></tr>
+<tr><td>IDs únicos</td><td><code>id</code> no duplicado en documento</td></tr>
+<tr><td>Jerarquía</td><td><code>box</code> puede contener controles y otras cajas; hijos válidos por componente</td></tr>
+<tr><td>Action</td><td>Referenciada existe en <code>ActionRegistry</code> (o se valida contra registry)</td></tr>
+<tr><td>Recursos</td><td>Ruta autorizada + existe + tipo válido</td></tr>
+<tr><td>Límites</td><td>Tamaño doc ≤ N, profundidad ≤ M, nodos ≤ K</td></tr>
+<tr><td>Requeridos</td><td>Props obligatorias presentes</td></tr>
+</tbody>
+</table>
+<p>Valores por defecto razonables (definidos por <code>ComponentDef</code>).</p>
+</section>
+
+<section id="integracion">
+<h2>15. Integración con Rocky</h2>
+<h3>15.1 Inspección realizada</h3>
+<ul>
+  <li><code>gfx.rs</code> + <code>pantalla.rs</code>: framebuffer VESA, <code>Canvas</code>, primitivas</li>
+  <li><code>input.rs</code> + <code>mouse.rs</code> + <code>ps2.rs</code>: entrada por sondeo</li>
+  <li><code>gui.rs</code> + <code>wm.rs</code>: TobyUI runtime (separado, NO se reemplaza)</li>
+  <li><code>fs.rs</code> + <code>disk.rs</code>: lectura disco runtime</li>
+  <li><code>png</code> + <code>inflate</code>: decodificación PNG</li>
+  <li><code>heap.rs</code> + <code>alloc</code>: heap kernel</li>
+  <li><code>main.rs</code> + <code>shell.rs</code>: arranque/bucle</li>
+</ul>
+<h3>15.2 Conexión con entrada</h3>
+<p>Reutilizar exactamente: <code>input::poll()</code>, <code>mouse::poll()</code>, <code>mouse::tomar()</code>. Convertir a eventos Toby UI.</p>
+<h3>15.3 Conexión con dibujo</h3>
+<p>Obtener <code>Canvas</code> vía <code>pantalla::obtener_canvas()</code>/<code>pantalla::tomar_canvas()</code>. Crear <code>CanvasRenderer</code> que envuelva dicho canvas.</p>
+<h3>15.4 Recursos</h3>
+<p>PNG del kit AQUA se copiarán a ruta autorizada en <code>rockydisk.img</code> (p.ej. <code>/usr/share/tobyui/themes/default/</code>). <code>resource.rs</code> los leerá vía <code>fs.rs</code>.</p>
+<h3>15.5 Ubicación</h3>
+<ul>
+  <li>Código: <code>kernel/src/toby_ui/</code></li>
+  <li>Compila con kernel: <code>no_std + alloc</code>, <code>x86_64-unknown-none</code></li>
+  <li>No toca arranque/PMM/GDT/paginación/scheduler/syscalls</li>
+  <li>Complementario a <code>wm/gui</code>, no sustituto</li>
+</ul>
+</section>
+
+<section id="prohibiciones">
+<h2>16. Prohibiciones estrictas</h2>
+<ul>
+  <li>Variables generales ni asignaciones arbitrarias</li>
+  <li>Funciones definidas por el usuario</li>
+  <li>Bucles ni recursividad programable</li>
+  <li>Condicionales de propósito general</li>
+  <li>Evaluación dinámica de expresiones</li>
+  <li>Intérprete de JavaScript</li>
+  <li>Ejecución de scripts</li>
+  <li>Acceso directo a memoria</li>
+  <li>Llamadas al sistema libres</li>
+  <li>Carga de bibliotecas arbitrarias</li>
+  <li>Ejecución de comandos del sistema</li>
+  <li>Acceso a archivos fuera de rutas autorizadas</li>
+</ul>
+<p><strong>Permitido:</strong> estados visuales, variantes declarativas, referencias <code>action</code> tipadas y validadas.</p>
+</section>
+
+<section id="fases">
+<h2>17. Plan por fases</h2>
+<table>
+<thead><tr><th>Fase</th><th>Objetivo</th><th>Estado</th></tr></thead>
+<tbody>
+<tr><td><strong>Fase 1</strong></td><td>Inspección repositorio + especificación (Toby UI)</td><td>Hecha</td></tr>
+<tr><td><strong>Fase 2</strong></td><td>Crear <code>toby_ui/</code>, <code>component.rs</code>, <code>document.rs</code>, <code>parser.rs</code>, <code>validation.rs</code>, <code>mod.rs</code>. Modelo tipado mínimo compilable.</td><td>Hecha</td></tr>
+<tr><td><strong>Fase 3</strong></td><td><code>layout.rs</code> — row/column/stack, spacing/padding/align, constraints. Tests deterministas.</td><td>Hecha</td></tr>
+<tr><td><strong>Fase 4</strong></td><td><code>resource.rs</code> + <code>theme.rs</code> (nine-slice). Carga desde FS, tema por defecto.</td><td>Hecha</td></tr>
+<tr><td><strong>Fase 5</strong></td><td><code>renderer.rs</code> — trait + <code>CanvasRenderer</code> sobre <code>gfx::Canvas</code>. Render estático.</td><td>Hecha</td></tr>
+<tr><td><strong>Fase 6</strong></td><td><code>event.rs</code> — conversión cruda→eventos Toby UI, foco, hover/pressed/focused.</td><td>Hecha</td></tr>
+<tr><td><strong>Fase 7</strong></td><td><code>action.rs</code> — registro de acciones seguro (<code>Registro</code>) + validación de claves.</td><td>Hecha</td></tr>
+<tr><td><strong>Fase 8</strong></td><td>Primera app <code>demo.toby</code> (<code>app.rs</code> + <code>demo.rs</code>): carga/valida/layout/render/interactúa. Verificación de punta a punta.</td><td>Hecha</td></tr>
+</tbody>
+</table>
+<div class="note"><strong>Regla:</strong> implementación incremental. Compilar tras cada cambio. Sin implementar todas las fases de golpe.</div>
+
+<p><strong>Pendiente de decidir (no es una fase del lenguaje):</strong> dónde se ejecuta la aplicación dentro del escritorio. El lenguaje y el <code>App</code> ya están completos y probados; engancharlos a la pantalla real es una decisión de arquitectura del runtime (pantalla completa con una orden propia, o ventana del escritorio con traducción del puntero y reparto del teclado).</p>
+
+<h3>17.1 Estado real (fases 2-8)</h3>
+<p>Módulos ya presentes en <code>kernel/src/toby_ui/</code>: <code>mod.rs</code>, <code>component.rs</code>, <code>document.rs</code>, <code>parser.rs</code>, <code>validation.rs</code>, <code>layout.rs</code>, <code>theme.rs</code>, <code>resource.rs</code>, <code>renderer.rs</code>, <code>event.rs</code>, <code>action.rs</code>, <code>app.rs</code>, <code>demo.rs</code> y el documento <code>demo.toby</code>.</p>
+<table>
+<thead><tr><th>Pieza</th><th>Qué hace hoy</th></tr></thead>
+<tbody>
+<tr><td><code>parser.rs</code></td><td>XML-like estricto: balance de etiquetas, atributos <code>k="v"</code>, comentarios <code>&lt;!-- --&gt;</code>, raíz obligatoria <code>&lt;toby-app&gt;</code>, sin texto suelto ni entidades. Límites: 64 KiB, 32 de profundidad, 4096 nodos, 32 atributos. Errores con línea y columna.</td></tr>
+<tr><td><code>validation.rs</code></td><td>Componente conocido, propiedad permitida, tipo correcto, enums de lista cerrada, obligatorias, <code>id</code> únicos, jerarquía (≥1 <code>window</code>; las hojas no admiten hijos).</td></tr>
+<tr><td><code>layout.rs</code></td><td>Dos pasadas (medida + colocación) sobre un mapa plano en preorden. <code>column</code>/<code>window</code>/<code>toby-app</code> vertical, <code>row</code> horizontal, <code>stack</code> en Z sin estirar. <code>spacing</code>, <code>padding</code>, <code>align</code> (start/center/end/stretch), <code>width</code>/<code>height</code> fijos y <code>Restricciones</code>. Todo entero y determinista. Incluye <code>indice_bajo(x,y)</code> para el hit-test.</td></tr>
+<tr><td><code>theme.rs</code></td><td>Tema <code>aqua</code>: métricas, paleta, acentos (azul, verde, rojo, naranja, amarillo, magenta, blanco, gris), sombra sólida y <code>NineSlice</code> de 3 piezas (izquierda/cuerpo/derecha).</td></tr>
+<tr><td><code>resource.rs</code></td><td>Carga PNG sólo desde <code>/usr/share/tobyui/</code> (sin <code>..</code>, sin <code>//</code>, sin <code>\</code>), con topes de tamaño, vía <code>fs.rs</code> + crate <code>png</code>.</td></tr>
+<tr><td><code>renderer.rs</code></td><td>Trait <code>Renderer</code> (limpiar, relleno, borde, texto, recorte, presentar) + <code>CanvasRenderer</code> sobre <code>gfx::Canvas</code> con pila de recortes real, y <code>pintar()</code>/<code>pintar_con_estado()</code> que dibujan ventana y botones (sombra + acento + texto centrado; hover aclara, pulsado oscurece, foco añade anillo interior, deshabilitado va en gris).</td></tr>
+<tr><td><code>event.rs</code></td><td>Traduce la entrada cruda a eventos normalizados (<code>Entrada::mover</code>/<code>botones_nuevos</code>/<code>tecla</code>, puros; <code>sondear()</code> es lo único que toca <code>mouse.rs</code>/<code>input.rs</code>). Mantiene hover, pulsado y foco (<code>Interaccion</code>), resuelve la diana subiendo por los padres, genera <strong>clic sólo si abajo y arriba caen en el mismo nodo</strong>, y navega el foco con Tab saltando los deshabilitados. Traduce todo a <code>Estado</code> para el tema: deshabilitado &gt; pulsado &gt; hover &gt; enfocado &gt; normal. Las flechas no llegan: <code>input.rs</code> las descarta, así que Tab es la navegación disponible.</td></tr>
+<tr><td><code>action.rs</code></td><td>Registro de acciones del runtime. El documento sólo <strong>nombra</strong> acciones (<code>action="settings.save"</code>); el código vive en el anfitrión como punteros a función <code>fn(&amp;mut C, &amp;Peticion) -&gt; Resultado</code> registrados con <code>Registro::registrar</code>. <code>despachar</code>/<code>despachar_nodo</code>/<code>despachar_click</code> ejecutan la acción de un clic; una clave no registrada o mal formada devuelve <code>ErrorAccion</code> (error controlado), nunca ejecuta nada más. Claves con forma <code>dominio.accion</code> (1–3 segmentos <code>[a-z_][a-z0-9_-]*</code>, ≤64 bytes), comprobadas <em>también</em> al validar el documento mediante <code>PropType::Accion</code> y <code>component::clave_valida</code>. El <code>BTreeMap</code> interno da <code>claves()</code> en orden determinista.</td></tr>
+<tr><td><code>app.rs</code></td><td>Encadena todo: <code>App::nueva</code>/<code>de_bytes</code>/<code>desde_fs</code> (analizar + validar + disponer), <code>procesar(Evento)</code> (aplica el evento, conserva la <code>Sesion</code> entre fotogramas y despacha la acción del clic), <code>atender_eventos</code>/<code>atender</code>/<code>sondear</code>, <code>pintar(&amp;mut Canvas, font)</code> y <code>fotograma(...)</code> = entrada + acciones + pintura. <code>Paso</code> resume cambios, acción y error sin perder nada. <code>cambiar_tamano</code> recalcula la disposición. Los fallos de montaje son <code>ErrorApp</code> (sintaxis / validación / recurso).</td></tr>
+<tr><td><code>demo.rs</code> + <code>demo.toby</code></td><td>Primera aplicación completa escrita en el lenguaje: una ventana con dos filas de botones (acciones reales + muestrario de variantes). El documento se incrusta con <code>include_str!</code>, así que la demo no depende del sistema de ficheros, y el mismo fichero se puede cargar de <code>/usr/share/tobyui/demo.toby</code>. El «código» son tres manejadores (<code>settings.save</code>, <code>settings.reset</code>, <code>window.close</code>) y el estado que tocan.</td></tr>
+</tbody>
+</table>
+<p><strong>Verificación usada:</strong> andamio de pruebas en el host (<code>%TEMP%\opencode\toby_pruebas</code>) que incluye <em>los mismos archivos</em> del kernel mediante <code>#[path]</code>, más un lienzo espejo de <code>gfx::Canvas</code>. <strong>89 pruebas, 0 fallos</strong>: 74 unitarias (parser, validación, layout, tema, renderer, eventos, acciones, <code>app</code> y <code>demo</code>) y 15 de píxeles reales — 7 del renderer y 8 de punta a punta sobre el <code>demo.toby</code> de verdad (colores de cada variante, hover/pulsado/foco/sombra, anillo de foco, clic que ejecuta la acción, botón deshabilitado que no recibe nada, recorte al encoger la ventana, acción inexistente → error controlado y documento inválido → no monta). El kernel compila con <code>cargo check --release --target x86_64-unknown-none</code> y la imagen completa se genera con <code>build.ps1</code>.</p>
+<p><strong>Lo único que falta para verlo en pantalla:</strong> que el escritorio (<code>gui.rs</code>/<code>wm.rs</code>) llame a <code>App::atender</code>/<code>pintar</code> con el búfer de una ventana o con la pantalla completa. <code>App::pintar</code> ya acepta cualquier <code>gfx::Canvas</code> y <code>app.rs</code> documenta el bucle exacto con APIs existentes (<code>wm::ventana</code>, <code>gfx::Canvas::from_buffer</code>, <code>wm::marcar_ventana</code>).</p>
+</section>
+
+<section id="ca">
+<h2>18. Criterios de aceptación</h2>
+<ul>
+  <li>Parser rechaza sintaxis inválida, componentes/props desconocidos</li>
+  <li>Validación aplica tipos, jerarquía, IDs únicos, límites</li>
+  <li>Layout reproducible con mismo árbol</li>
+  <li>Recursos solo desde rutas autorizadas</li>
+  <li><code>action</code> desconocida → error controlado</li>
+  <li>Sin <code>eval</code>, bucles, funciones, scripts en <code>.toby</code></li>
+  <li>Compila <code>x86_64-unknown-none</code>, <code>no_std</code>, <code>alloc</code></li>
+  <li>No rompe <code>wm/gui/shell/fs/entrada</code></li>
+  <li>Usa APIs existentes cuando posible</li>
+  <li>Separación clara TobyUI runtime vs Toby UI lenguaje</li>
+  <li>Nine-slice funciona con piezas AQUA</li>
+</ul>
+</section>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,57 @@
+   338  kernel\src\acpi.rs                                                 //! ACPI minimo: lo justo para apagar la maquina por el esta
+   368  kernel\src\asm.rs                                                  //! El ensamblador de rocky: traduce un fuente de texto a un
+   410  kernel\src\bios.rs                                                 //! Llamadas al BIOS (INT 10h / VESA VBE) desde el kernel de
+   323  kernel\src\bios.s                                                  /* bios.s - puente al BIOS (INT 10h / VESA VBE) desde el ker
+    67  kernel\src\cmos.rs                                                 //! Reloj de tiempo real (RTC/CMOS) y datos de memoria del B
+   237  kernel\src\console.rs                                              //! Consola unificada: escribe a la vez en VGA y en el puert
+   235  kernel\src\cpu.rs                                                  //! Utilidades de CPU: E/S de puertos, interrupciones y para
+   298  kernel\src\cursor.rs                                               //! Puntero del raton, dibujado a partir del BMP `kernel/bmp
+   405  kernel\src\demo.rs                                                 //! Demo grafica 2D de rocky.
+   398  kernel\src\disk.rs                                                 //! Acceso a disco: ATA en modo PIO o, si arrancamos de un p
+   684  kernel\src\fd.rs                                                   //! Descriptores de fichero: la capa "todo es un fichero" de
+  2151  kernel\src\fs.rs                                                   //! ext4: el sistema de ficheros propio de rocky.
+   139  kernel\src\gdt.rs                                                  //! Segmentos de usuario (anillo 3) y TSS, sobre la GDT unif
+   618  kernel\src\gfx.rs                                                  //! Graficos 2D: modos VESA VBE y un lienzo de pixeles sobre
+  1014  kernel\src\gui.rs                                                  //! TobyUI, el escritorio grafico de rocky.
+   229  kernel\src\heap.rs                                                 //! Heap del kernel: asignador dinamico de memoria para rock
+   316  kernel\src\idt.rs                                                  //! Tabla de descriptores de interrupciones (IDT) y gestion 
+   469  kernel\src\input.rs                                                //! Entrada de teclado: sondea el controlador PS/2 y, ademas
+   192  kernel\src\interrupts.s                                            /* Stubs de interrupciones y excepciones de rockyOS.
+    14  kernel\src\kira\comp.rs                                            //! Compositor mínimo: pinta al framebuffer.
+    63  kernel\src\kira\conn.rs                                            //! Estado de una conexión Kira con un cliente.
+    33  kernel\src\kira\dev.rs                                             pub fn escribir_kira(cid: u32, datos: &[u8]) -> i64 {
+    19  kernel\src\kira\event.rs                                           //! Generación de eventos Kira/X11.
+     6  kernel\src\kira\input.rs                                           //! Traducción PS/2 -> eventos X11 (stub inicial)
+    55  kernel\src\kira\mod.rs                                             //! Servidor Kira Window Server mínimo para rocky.
+    86  kernel\src\kira\proto.rs                                           //! Helpers para codificar/decodificar Kira/X11 wire protoco
+    29  kernel\src\kira\req.rs                                             //! Despacho de requests Kira/X11.
+    40  kernel\src\kira\wm.rs                                              //! Gestor de ventanas interno del servidor kira.
+   311  kernel\src\libraries\inflate\src\lib.rs                            //! Descompresor DEFLATE (RFC 1951) y zlib (RFC 1950).
+   232  kernel\src\libraries\png\src\lib.rs                                //! Lector de PNG (RFC 2083).
+   133  kernel\src\main.rs                                                 //! rocky - un sistema operativo x86_64 escrito 100% en Rust
+   111  kernel\src\mouse.rs                                                //! Raton PS/2 colgado del puerto auxiliar del controlador 8
+   157  kernel\src\paging.rs                                               //! Paginacion de 4 niveles (PML4) para rocky.
+   384  kernel\src\panico.rs                                               //! Subsistema de emergencia de rocky: la pantalla azul del 
+   417  kernel\src\pantalla.rs                                             //! Pantalla de emergencia de rocky: el "modo seguro" de sal
+    42  kernel\src\pic.rs                                                  //! Controlador de interrupciones programable 8259A (PIC).
+   322  kernel\src\pipe.rs                                                 //! Tuberias anonimas: el `fs/pipe.c` de Linux 0.01, portado
+    75  kernel\src\pit.rs                                                  //! Temporizador programable de intervalo 8253/8254 (canal 0
+   366  kernel\src\pmm.rs                                                  //! Gestor de memoria fisica: reparte la RAM en marcos (fram
+   875  kernel\src\proceso.rs                                              //! Procesos de usuario: espacio de direcciones propio y pro
+   347  kernel\src\ps2.rs                                                  //! Controlador PS/2 (i8042): teclado y raton.
+   140  kernel\src\rok.rs                                                  //! El formato de ejecutable de rocky: los ficheros `.rok`.
+   553  kernel\src\senal.rs                                                //! Señales: el `kernel/signal.c` de Linux 0.01, portado a r
+    59  kernel\src\serial.rs                                               //! Controlador de puerto serie COM1 (16550 UART).
+   201  kernel\src\servicios.rs                                            //! Servicios: subsistemas que pueden estar **activos** o **
+  1699  kernel\src\shell.rs                                                //! El interprete de ordenes de rocky.
+    86  kernel\src\sound.rs                                                //! Altavoz interno de la placa (PC speaker) para rocky.
+    25  kernel\src\start.s                                                 /* Punto de entrada del kernel de rockyOS (64 bits, modo lar
+    26  kernel\src\sync.rs                                                 //! Celda global sincronizada para estado mutable en `static
+   741  kernel\src\syscall.rs                                              //! Llamadas al sistema: la puerta `int 0x80` del anillo 3 a
+  1222  kernel\src\tarea.rs                                                //! Tareas: multitarea apropiativa dentro del anillo 0 (el p
+   296  kernel\src\term.rs                                                 //! Terminal grafico.
+   456  kernel\src\tty.rs                                                  //! TTY: la consola vista como **terminal**, con disciplina 
+   101  kernel\src\vga.rs                                                  //! Consola de texto VGA en modo 3 (80x25, memoria en 0xB800
+   107  kernel\src\visor.rs                                                //! Visor de imagenes a pantalla completa (la orden `imagen`
+   863  kernel\src\vm.rs                                                   //! La maquina virtual de rocky: el motor que ejecuta los pr
+  1123  kernel\src\wm.rs                                                   //! Gestor de ventanas de TobyUI, el escritorio grafico de r

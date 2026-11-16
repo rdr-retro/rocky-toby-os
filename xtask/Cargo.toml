@@ -1,0 +1,12 @@
+[package]
+name = "xtask"
+version = "0.1.0"
+edition = "2021"
+description = "Constructor y lanzador de rocky"
+
+[dependencies]
+png = { path = "../kernel/src/libraries/png" }
+
+[[bin]]
+name = "xtask"
+path = "src/main.rs"

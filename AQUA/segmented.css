@@ -1,0 +1,226 @@
+/* ==========================================================================
+   SEGMENTED AQUA · control segmentado (estilo macOS "Segmented Control")
+   --------------------------------------------------------------------------
+   Un <input type="radio"> por segmento (accesible, navegable con flechas) y la
+   piel la ponen las piezas PNG 3-slice:
+
+       blanco (pista / segmento inactivo)
+         izquierda : segmented_withe_left.png   (divisor oscuro a su izquierda)
+         cuerpo    : segmented_withe_body.png   (se estira)
+         derecha   : segmented_withe_right.png  (extremo redondeado)
+
+       azul (segmento activo)
+         izquierda : segmented_blue_left.png    (extremo redondeado)
+         cuerpo    : segmented_blue_body.png    (se estira)
+         derecha   : segmented_blue_right.png   (divisor oscuro a su derecha)
+
+   Cada segmento se monta con  [izquierda] + [cuerpo estirado] + [derecha], y
+   las piezas se VOLTEAN (scaleX(-1)) según dónde caiga el segmento: los
+   extremos redondeados del control son withe_right y blue_left, y se usan
+   (volteadas si hace falta) cuando el segmento toca un borde exterior; el
+   resto de bordes son divisores rectos (withe_left con el filo a la
+   izquierda, blue_right con el filo a la derecha):
+
+     blanco  izquierda : segmented_withe_right.png volteada (solo el PRIMERO; redondea)
+                         segmented_withe_left.png           (los demás, divisor)
+             derecha   : segmented_withe_right.png          (solo el ÚLTIMO; redondea)
+                         segmented_withe_left.png volteada  (los demás, divisor)
+     azul    izquierda : segmented_blue_left.png            (solo el PRIMERO; redondea)
+                         segmented_blue_right.png volteada  (los demás, divisor)
+             derecha   : segmented_blue_left.png volteada   (solo el ÚLTIMO; redondea)
+                         segmented_blue_right.png           (los demás, divisor)
+
+   El contenedor no pinta nada (ni fondo ni recorte): las piezas cubren cada
+   segmento y su silueta es la del control.
+
+   Alto con --aqua-seg-h (todo lo demás se deriva).
+   ========================================================================== */
+
+.aqua-seg {
+  /* Alto del control. */
+  --aqua-seg-h: 32px;
+  /* Ancho del extremo en la imagen: 170 de 418 de alto. */
+  --aqua-seg-cap: calc(var(--aqua-seg-h) * 170 / 418);
+  /* Texto sin seleccionar (sobre blanco) y seleccionado (sobre azul). */
+  --aqua-seg-ink: #3c3c3e;
+  --aqua-seg-on: #ffffff;
+  /* Piezas del segmento seleccionado (azules por defecto; las variantes de
+     color están al final de estas reglas). */
+  --aqua-seg-sel-left: url("segmented_blue_left.png");
+  --aqua-seg-sel-body: url("segmented_blue_body.png");
+  --aqua-seg-sel-right: url("segmented_blue_right.png");
+
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  /* por defecto mide lo que mide su contenido (como en macOS) */
+  width: fit-content;
+  max-width: 100%;
+  height: var(--aqua-seg-h);
+  /* Sin border-radius ni overflow: el redondeo lo pone la propia pieza;
+     recortar el contenedor se comía las esquinas de los segmentos. */
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  /* sin fondo: cada segmento se pinta con sus propias piezas. Un fondo
+     estirado aquí rellenaría los huecos transparentes de los extremos
+     redondeados y dejaría esquinas cuadradas con su filo, que no corresponden */
+}
+
+/* --- tamaños --- */
+.aqua-seg--sm { --aqua-seg-h: 24px; }
+.aqua-seg--lg { --aqua-seg-h: 40px; }
+
+/* --- variante a lo ancho (los segmentos se reparten el espacio) --- */
+.aqua-seg--block { width: 100%; }
+
+/* --- cada segmento --- */
+.aqua-seg__item {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+
+  /* juego de piezas por defecto: blanco */
+  --seg-left: url("segmented_withe_left.png");
+  --seg-left-flip: 1;
+  --seg-body: url("segmented_withe_body.png");
+  --seg-right: url("segmented_withe_left.png"); /* se voltea */
+  --seg-right-flip: -1;
+}
+
+/* el último segmento blanco cierra con el extremo redondeado dedicado */
+.aqua-seg__item:last-child {
+  --seg-right: url("segmented_withe_right.png");
+  --seg-right-flip: 1;
+}
+
+/* el primer segmento blanco abre con ese mismo extremo redondeado volteado:
+   withe_left traería el divisor pintado en el borde del control */
+.aqua-seg__item:first-child {
+  --seg-left: url("segmented_withe_right.png");
+  --seg-left-flip: -1;
+}
+
+/* segmento seleccionado: juego de piezas azul */
+.aqua-seg__item:has(.aqua-seg__input:checked) {
+  --seg-left: var(--aqua-seg-sel-left);
+  --seg-left-flip: 1;
+  --seg-body: var(--aqua-seg-sel-body);
+  --seg-right: var(--aqua-seg-sel-right);
+  --seg-right-flip: 1;
+}
+
+/* el azul que no está pegado al borde izquierdo no debe redondear: se coge
+   segmented_blue_right.png y se voltea para que mire a la izquierda, con su
+   borde oscuro (el divisor) en el límite izquierdo */
+.aqua-seg__item:not(:first-child):has(.aqua-seg__input:checked) {
+  --seg-left: var(--aqua-seg-sel-right);
+  --seg-left-flip: -1;
+}
+
+/* el último segmento azul cierra con segmented_blue_left.png volteada (es el
+   extremo redondo del control); blue_right dejaría su divisor en el borde */
+.aqua-seg__item:last-child:has(.aqua-seg__input:checked) {
+  --seg-right: var(--aqua-seg-sel-left);
+  --seg-right-flip: -1;
+}
+
+/* --- variantes de color ---------------------------------------------------
+   El segmento seleccionado, con las mismas tres piezas y el tono girado
+   (las genera recolorear.py). El blanco de los no seleccionados no cambia. */
+.aqua-seg--blue    { --aqua-seg-sel-left: url("segmented_blue_left.png");    --aqua-seg-sel-body: url("segmented_blue_body.png");    --aqua-seg-sel-right: url("segmented_blue_right.png"); }
+.aqua-seg--green   { --aqua-seg-sel-left: url("segmented_green_left.png");   --aqua-seg-sel-body: url("segmented_green_body.png");   --aqua-seg-sel-right: url("segmented_green_right.png"); }
+.aqua-seg--red     { --aqua-seg-sel-left: url("segmented_red_left.png");     --aqua-seg-sel-body: url("segmented_red_body.png");     --aqua-seg-sel-right: url("segmented_red_right.png"); }
+.aqua-seg--orange  { --aqua-seg-sel-left: url("segmented_orange_left.png");  --aqua-seg-sel-body: url("segmented_orange_body.png");  --aqua-seg-sel-right: url("segmented_orange_right.png"); }
+.aqua-seg--yellow  { --aqua-seg-sel-left: url("segmented_yellow_left.png");  --aqua-seg-sel-body: url("segmented_yellow_body.png");  --aqua-seg-sel-right: url("segmented_yellow_right.png"); }
+.aqua-seg--magenta { --aqua-seg-sel-left: url("segmented_magenta_left.png"); --aqua-seg-sel-body: url("segmented_magenta_body.png"); --aqua-seg-sel-right: url("segmented_magenta_right.png"); }
+
+/* input nativo, oculto pero funcional */
+.aqua-seg__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* --- la cara visible del segmento: [izq] + [cuerpo] + [der] --- */
+.aqua-seg__face {
+  position: relative;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 0 calc(var(--aqua-seg-h) * .52);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  font-size: calc(var(--aqua-seg-h) * .42);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--aqua-seg-ink);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color .12s ease;
+
+  /* cuerpo: se estira y deja libre el ancho de cada extremo */
+  background-image: var(--seg-body);
+  background-position: center center;
+  background-size: max(0px, calc(100% - var(--aqua-seg-cap) * 2)) 100%;
+  background-repeat: no-repeat;
+}
+
+/* las dos piezas de extremo */
+.aqua-seg__face::before,
+.aqua-seg__face::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--aqua-seg-cap);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+.aqua-seg__face::before {
+  left: 0;
+  background-image: var(--seg-left);
+  /* la pieza derecha se voltea para mirar a la izquierda */
+  transform: scaleX(var(--seg-left-flip));
+}
+.aqua-seg__face::after {
+  right: 0;
+  background-image: var(--seg-right);
+  /* la pieza izquierda se voltea para mirar a la derecha */
+  transform: scaleX(var(--seg-right-flip));
+}
+
+/* --- estados --- */
+.aqua-seg__item:hover .aqua-seg__face { color: #1c1c1e; }
+.aqua-seg__item:has(.aqua-seg__input:checked) .aqua-seg__face { color: var(--aqua-seg-on); }
+.aqua-seg__item:has(.aqua-seg__input:checked) .aqua-seg__face:hover { color: var(--aqua-seg-on); }
+
+.aqua-seg__input:focus-visible + .aqua-seg__face {
+  outline: 3px solid #8fd0ff;
+  outline-offset: -3px;
+}
+
+.aqua-seg:has(.aqua-seg__input:disabled) {
+  cursor: not-allowed;
+  opacity: .5;
+}
+.aqua-seg__input:disabled + .aqua-seg__face {
+  cursor: not-allowed;
+}
+.aqua-seg:has(.aqua-seg__input:disabled):hover .aqua-seg__face {
+  color: var(--aqua-seg-ink);
+}
+.aqua-seg:has(.aqua-seg__input:disabled) .aqua-seg__input:checked + .aqua-seg__face:hover {
+  color: var(--aqua-seg-on);
+}
+
+/* El popup menu que usa estas mismas piezas (blanco + azul con ▲▼) vive en
+   popup.css: allí la lista de opciones la abre un <select> real. */

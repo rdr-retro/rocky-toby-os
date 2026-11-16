@@ -1,0 +1,9 @@
+[package]
+name = "rockyhw"
+version = "0.1.0"
+edition = "2021"
+description = "Primitivas de hardware de rocky (PCI, BAR, DMA, MMIO) en no_std"
+
+[lib]
+name = "rockyhw"
+path = "src/lib.rs"

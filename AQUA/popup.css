@@ -1,0 +1,202 @@
+/* ==========================================================================
+   POPUP MENU AQUA · lista de opciones (estilo macOS "Pop-up Button")
+   --------------------------------------------------------------------------
+   Es un <select> real: el navegador abre la lista al pulsarlo, la cierra al
+   elegir y lo navega con el teclado, así que no hace falta nada de JavaScript.
+   Se le quita la apariencia nativa y la piel la ponen las piezas PNG del
+   segmented:
+
+       [ blanca con el valor ][ azul con ▲▼ ]
+
+   Las flechas son SÓLO el indicador de que se despliega una lista: no son
+   botones. La capa de la piel no recibe clics (`pointer-events: none`), así
+   que todo el control lo maneja el <select>, que está encima y transparente.
+
+   Piezas y volteos: los mismos del segmented, «blanco primero + azul último»:
+     blanco  izquierda : segmented_withe_right.png volteada (extremo redondo)
+             derecha   : segmented_withe_left.png  volteada (divisor)
+     azul    izquierda : segmented_blue_right.png  volteada (divisor)
+             derecha   : segmented_blue_left.png   volteada (extremo redondo)
+
+   Alto con --aqua-pop-h (todo lo demás se deriva).
+   ========================================================================== */
+
+.aqua-pop {
+  /* Alto del control. */
+  --aqua-pop-h: 32px;
+  /* Ancho del extremo en la imagen: 170 de 418 de alto. */
+  --aqua-pop-cap: calc(var(--aqua-pop-h) * 170 / 418);
+  /* Lado del botón azul de las flechas (el ancho de la flecha sale de su
+     proporción 631 : 431, a partir de su alto). */
+  --aqua-pop-w: calc(var(--aqua-pop-h) * 1.3);
+  --aqua-pop-arrow-h: calc(var(--aqua-pop-h) * .22);
+  --aqua-pop-ink: #3c3c3e;
+  /* Piezas azules del control (la parte blanca no cambia de color; las
+     variantes están más abajo). */
+  --aqua-pop-sel-left: url("segmented_blue_left.png");
+  --aqua-pop-sel-body: url("segmented_blue_body.png");
+  --aqua-pop-sel-right: url("segmented_blue_right.png");
+
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  /* mide lo que mida el <select> de dentro */
+  width: fit-content;
+  max-width: 100%;
+  height: var(--aqua-pop-h);
+  vertical-align: middle;
+}
+
+/* --- el <select> real, transparente, encima de la piel --- */
+.aqua-pop__input {
+  -webkit-appearance: none;
+  appearance: none;
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  height: 100%;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  /* el texto se centra en la parte blanca: el hueco de la derecha es el botón
+     azul y se le suma el mismo extremo por la izquierda para que el centro
+     caiga donde caería en el segmented */
+  padding: 0 calc(var(--aqua-pop-w) + var(--aqua-pop-cap)) 0 var(--aqua-pop-cap);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  font-size: calc(var(--aqua-pop-h) * .42);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--aqua-pop-ink);
+  text-align: center;
+  cursor: default;
+  transition: color .12s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* fuera la flechita nativa en navegadores antiguos */
+.aqua-pop__input::-ms-expand { display: none; }
+
+.aqua-pop:hover .aqua-pop__input { color: #1c1c1e; }
+
+.aqua-pop__input:focus-visible {
+  outline: 3px solid #8fd0ff;
+  outline-offset: -3px;
+}
+
+/* --- la piel: [blanco] + [azul], detrás y sin recibir clics --- */
+.aqua-pop__skin {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  align-items: stretch;
+  pointer-events: none;
+}
+
+.aqua-pop__seg {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  /* cuerpo: se estira y deja libre el ancho de cada extremo */
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: max(0px, calc(100% - var(--aqua-pop-cap) * 2)) 100%;
+}
+
+/* las dos piezas de extremo */
+.aqua-pop__seg::before,
+.aqua-pop__seg::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--aqua-pop-cap);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.aqua-pop__seg::before {
+  left: 0;
+  background-image: var(--pop-left);
+  transform: scaleX(var(--pop-left-flip));
+}
+.aqua-pop__seg::after {
+  right: 0;
+  background-image: var(--pop-right);
+  transform: scaleX(var(--pop-right-flip));
+}
+
+/* el blanco ocupa el resto por la izquierda */
+.aqua-pop__seg--text {
+  flex: 1 1 auto;
+  background-image: url("segmented_withe_body.png");
+  --pop-left: url("segmented_withe_right.png");
+  --pop-left-flip: -1;
+  --pop-right: url("segmented_withe_left.png");
+  --pop-right-flip: -1;
+}
+
+/* el azul cierra el control por la derecha */
+.aqua-pop__seg--step {
+  flex: 0 0 auto;
+  width: var(--aqua-pop-w);
+  background-image: var(--aqua-pop-sel-body);
+  --pop-left: var(--aqua-pop-sel-right);
+  --pop-left-flip: -1;
+  --pop-right: var(--aqua-pop-sel-left);
+  --pop-right-flip: -1;
+}
+
+/* --- variantes de color ---------------------------------------------------
+   La parte azul del control, con las mismas piezas y el tono girado (las
+   genera recolorear.py). El blanco y las flechas negras no cambian. */
+.aqua-pop--blue    { --aqua-pop-sel-left: url("segmented_blue_left.png");    --aqua-pop-sel-body: url("segmented_blue_body.png");    --aqua-pop-sel-right: url("segmented_blue_right.png"); }
+.aqua-pop--green   { --aqua-pop-sel-left: url("segmented_green_left.png");   --aqua-pop-sel-body: url("segmented_green_body.png");   --aqua-pop-sel-right: url("segmented_green_right.png"); }
+.aqua-pop--red     { --aqua-pop-sel-left: url("segmented_red_left.png");     --aqua-pop-sel-body: url("segmented_red_body.png");     --aqua-pop-sel-right: url("segmented_red_right.png"); }
+.aqua-pop--orange  { --aqua-pop-sel-left: url("segmented_orange_left.png");  --aqua-pop-sel-body: url("segmented_orange_body.png");  --aqua-pop-sel-right: url("segmented_orange_right.png"); }
+.aqua-pop--yellow  { --aqua-pop-sel-left: url("segmented_yellow_left.png");  --aqua-pop-sel-body: url("segmented_yellow_body.png");  --aqua-pop-sel-right: url("segmented_yellow_right.png"); }
+.aqua-pop--magenta { --aqua-pop-sel-left: url("segmented_magenta_left.png"); --aqua-pop-sel-body: url("segmented_magenta_body.png"); --aqua-pop-sel-right: url("segmented_magenta_right.png"); }
+
+/* --- las flechas: indicador, no botones --- */
+.aqua-pop__pair {
+  position: absolute;
+  inset: 0;
+  /* la pareja va apretada y centrada entera sobre la raya del medio: las dos
+     flechas a la misma distancia del centro */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--aqua-pop-arrow-h) * .3);
+}
+
+/* la raya entre las dos flechas (no viene en ninguna pieza) */
+.aqua-pop__pair::after {
+  content: "";
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  top: 50%;
+  height: 1px;
+  background: rgba(8, 28, 58, .38);
+}
+
+.aqua-pop__arrow {
+  display: block;
+  width: calc(var(--aqua-pop-arrow-h) * 631 / 431);
+  height: var(--aqua-pop-arrow-h);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+/* el arte es negro y plano: se usa tal cual, sin filtro */
+.aqua-pop__arrow--up { background-image: url("arrow up.png"); }
+.aqua-pop__arrow--down { background-image: url("arrow_down.png"); }
+
+/* --- deshabilitado --- */
+.aqua-pop:has(.aqua-pop__input:disabled) {
+  opacity: .5;
+}
+.aqua-pop__input:disabled {
+  cursor: not-allowed;
+}

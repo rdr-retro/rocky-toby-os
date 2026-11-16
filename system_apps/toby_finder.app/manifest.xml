@@ -1,0 +1,9 @@
+<app nombre="toby_finder" version="1.0">
+  <identidad titulo="Toby Finder" icono="img/toby_finder.png"/>
+  <ui principal="ui/main.toby" tema="aqua">
+    <vista nombre="principal" archivo="ui/main.toby"/>
+  </ui>
+  <codigo lenguaje="rust" fuente="code/src/main.rs" binario="code/app.elf"/>
+  <inicio clase="sistema" automatico="false" prioridad="100"/>
+  <capacidades><capacidad nombre="ventana"/></capacidades>
+</app>

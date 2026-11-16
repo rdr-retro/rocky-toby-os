@@ -1,0 +1,7 @@
+<toby-app name="app-verificacion">
+  <window title="Verificacion" width="480" height="300">
+    <stack width="480" height="300">
+      <button id="saludo" name="saludo" variant="blue" title="Hola desde Toby AppKit" x="150" y="120"/>
+    </stack>
+  </window>
+</toby-app>

@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Conoce Rocky & Toby OS, Kira, Toby Lang y Toby AppKit.">
+  <title>Rocky &amp; Toby OS</title>
+  <link rel="stylesheet" href="AQUA/button.css">
+  <link rel="stylesheet" href="AQUA/box.css">
+  <style>
+    @font-face {
+      font-family: "SF Pro Local";
+      src: url("Fonts/SFPRODISPLAYREGULAR.OTF") format("opentype");
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "SF Pro Local";
+      src: url("Fonts/SFPRODISPLAYBOLD.OTF") format("opentype");
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+    }
+
+    :root {
+      color-scheme: light;
+      font-family: "SF Pro Local", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #222a32;
+      background: #fff;
+      font-synthesis: none;
+      --ink-soft: #56616c;
+      --blue: #176fc0;
+      --line: #dce3e9;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      background: #fff;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    a { color: #1766aa; text-decoration: none; }
+    a:hover { color: #0b4a83; }
+    a:focus-visible { outline: 2px solid #1685e5; outline-offset: 3px; }
+
+    .page { width: min(1120px, calc(100% - 36px)); margin: 34px auto 0; }
+    .hero {
+      display: block;
+      padding: clamp(28px, 5vw, 58px);
+      overflow: hidden;
+      border: 1px solid #d6e4ee;
+      border-radius: 20px;
+      background:
+        radial-gradient(ellipse at 92% 0%, rgba(189, 224, 247, .52), transparent 24rem),
+        linear-gradient(125deg, #fff, #f0f7fc 72%, #e9f4fb);
+    }
+    h1 {
+      max-width: 700px;
+      margin: 0;
+      color: #202a34;
+      font-family: "Times New Roman", Times, serif;
+      font-size: clamp(38px, 6.4vw, 66px);
+      font-weight: 700;
+      letter-spacing: -.055em;
+      line-height: 1.02;
+    }
+    h1 span { color: #3681b9; }
+    .hero__copy { max-width: 640px; margin: 19px 0 24px; color: var(--ink-soft); font-size: clamp(15px, 1.7vw, 18px); }
+    .hero__actions { display: flex; align-items: center; flex-wrap: wrap; gap: 17px; }
+    .hero__actions .aqua-btn { --aqua-size: 38px; }
+    .hero__actions .aqua-btn__label { font-size: 11px; }
+    .text-link { font-size: 12px; font-weight: 700; }
+
+    .intro { max-width: 760px; margin: 55px 0 24px; }
+    .intro__eyebrow { margin: 0 0 6px; color: #637c8e; font-size: 10px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+    .intro h2, .flow h2 { margin: 0; color: #27323b; font-size: clamp(23px, 3vw, 32px); letter-spacing: -.035em; line-height: 1.2; }
+    .intro p:last-child { margin: 12px 0 0; color: var(--ink-soft); }
+
+    .section-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 17px; }
+    .topic {
+      position: relative;
+      min-width: 0;
+      padding: 24px 24px 22px;
+      scroll-margin-top: 20px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .9);
+      transition: border-color .16s ease, transform .16s ease;
+    }
+    .topic:hover { border-color: #b9d0e1; transform: translateY(-2px); }
+    .topic__heading { display: flex; align-items: center; gap: 12px; margin-bottom: 13px; }
+    .topic__number {
+      display: grid;
+      width: 31px;
+      height: 31px;
+      flex: 0 0 auto;
+      place-items: center;
+      border-radius: 10px;
+      color: #1766a2;
+      background: #e8f3fb;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .topic:nth-child(2) .topic__number { color: #258145; background: #e9f6ec; }
+    .topic:nth-child(3) .topic__number { color: #7255a0; background: #f1ecf8; }
+    .topic:nth-child(4) .topic__number { color: #a26b24; background: #fbf2e3; }
+    .topic h3 { margin: 0; color: #29343e; font-size: 18px; letter-spacing: -.02em; }
+    .topic p { margin: 0 0 11px; color: #58636d; font-size: 13px; }
+    .topic p:last-child { margin-bottom: 0; }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+    .tag { padding: 3px 9px; border: 1px solid #dce3e8; border-radius: 20px; color: #5a6570; background: #f7f9fa; font-size: 10px; font-weight: 600; }
+
+    .sample-box.aqua-box {
+      max-width: none;
+      margin: 17px 0 0;
+      padding: 15px 14px 12px;
+      border-radius: 8px;
+      background: #f2f4f6;
+      font: inherit;
+      line-height: 1.5;
+    }
+    .sample-box .aqua-box__title { left: 11px; font: 700 10px/14px "SF Pro Local", sans-serif; }
+    .sample-box p { margin: 0; color: #58636d; font-size: 12px; }
+
+    .kernel-detail {
+      margin-top: 58px;
+      scroll-margin-top: 24px;
+    }
+    .kernel-detail__intro { max-width: 760px; margin-bottom: 32px; }
+    .kernel-detail__intro .intro__eyebrow { margin-bottom: 6px; }
+    .kernel-detail__intro h2 { margin: 0; color: #27323b; font-size: clamp(27px, 3.6vw, 39px); font-weight: 700; letter-spacing: -.035em; line-height: 1.15; }
+    .kernel-detail__intro p:last-child { max-width: 730px; margin: 13px 0 0; color: var(--ink-soft); font-size: 16px; line-height: 1.72; }
+    .kernel-detail__body { max-width: 780px; }
+    .kernel-topic { margin-top: 29px; }
+    .kernel-topic h3 { margin: 0 0 7px; color: #344654; font-size: 18px; font-weight: 700; letter-spacing: -.02em; line-height: 1.35; }
+    .kernel-topic p { max-width: 760px; margin: 0; color: #58636d; font-size: 15px; line-height: 1.72; }
+    .kernel-topic p + p { margin-top: 9px; }
+    .rust-topic { margin-top: 31px; }
+    .rust-topic h3 { margin: 0 0 7px; color: #155d91; font-size: 18px; font-weight: 700; letter-spacing: -.02em; line-height: 1.35; }
+    .rust-topic p { max-width: 760px; margin: 0; color: #455865; font-size: 15px; line-height: 1.72; }
+    .rust-topic p + p { margin-top: 9px; }
+    .kernel-keyword { color: #244d68; font-family: "Times New Roman", Times, serif; font-size: 1.04em; font-weight: 700; letter-spacing: 0; }
+
+    .site-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      margin-top: 34px;
+      padding: 22px 0 30px;
+      border-top: 1px solid #d7dfe5;
+      color: #78828b;
+      font-size: 11px;
+    }
+    .site-footer p { margin: 0; }
+    .site-footer__links { display: flex; flex-wrap: wrap; gap: 14px; }
+    .site-footer a { color: #5b7487; }
+
+    @media (max-width: 720px) {
+      .page { width: min(100% - 28px, 1120px); }
+      .page { margin-top: 18px; }
+      .hero { grid-template-columns: 1fr; gap: 25px; }
+      .section-grid { grid-template-columns: 1fr; }
+      .intro { margin-top: 40px; }
+    }
+    @media (max-width: 460px) {
+      .page { width: calc(100% - 24px); }
+      .hero { padding: 27px 21px; border-radius: 15px; }
+      .hero__actions { gap: 11px; }
+      .topic { padding: 20px 18px; }
+      .site-footer { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page" id="inicio">
+    <section class="hero" aria-labelledby="page-title">
+      <div>
+        <h1 id="page-title">Rocky <span>&amp;</span><br>Toby OS</h1>
+        <p class="hero__copy">Un sistema creado desde cero: una parte pone en marcha el ordenador, otra muestra el escritorio y otras ayudan a dar forma a las aplicaciones.</p>
+        <div class="hero__actions">
+          <a class="aqua-btn aqua-btn--blue" href="#rocky" style="--aqua-size:38px"><span class="aqua-btn__cap aqua-btn__cap--left"></span><span class="aqua-btn__body"><span class="aqua-btn__label">Explorar el sistema</span></span><span class="aqua-btn__cap aqua-btn__cap--right"></span></a>
+          <a class="text-link" href="#toby-lang">Ver cómo se crean las apps <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="intro" aria-labelledby="intro-title">
+      <p class="intro__eyebrow">Arquitectura del proyecto</p>
+      <h2 id="intro-title">Cuatro partes. Un mismo sistema.</h2>
+      <p>Cada nombre tiene un trabajo sencillo de distinguir: Rocky pone la base, Kira muestra y maneja el escritorio, Toby Lang sirve para diseñar las pantallas y AppKit ofrece piezas listas para construir aplicaciones.</p>
+    </section>
+
+    <div class="section-grid">
+      <section class="topic" id="rocky" aria-labelledby="rocky-title">
+        <div class="topic__heading"><span class="topic__number">01</span><h3 id="rocky-title">Rocky · la base</h3></div>
+        <p>Tras las comprobaciones iniciales del ordenador, <b>Rocky</b> es el primer componente principal del sistema en tomar el control. Prepara la base para que las demás partes puedan funcionar.</p>
+        <p>También reparte recursos como la memoria y el tiempo del procesador, y organiza dónde se guardan los archivos. Es como los cimientos y el coordinador del sistema; su organizador de archivos se llama <b>Estrato</b>.</p>
+        <div class="tag-list"><span class="tag">Pone en marcha el equipo</span><span class="tag">Reparte recursos</span><span class="tag">Organiza archivos</span></div>
+      </section>
+
+      <section class="topic" id="kira" aria-labelledby="kira-title">
+        <div class="topic__heading"><span class="topic__number">02</span><h3 id="kira-title">Kira · lo que ves</h3></div>
+        <p><b>Kira</b> es la parte visual con la que interactúas: dibuja el escritorio, las ventanas, la barra superior y el Dock. También recoge lo que haces con el ratón y el teclado.</p>
+        <p>Al abrir o mover una ventana, Kira actualiza la pantalla para mostrar el cambio. En pocas palabras, es quien convierte el sistema en un entorno que puedes ver y manejar.</p>
+        <div class="tag-list"><span class="tag">Escritorio</span><span class="tag">Ventanas</span><span class="tag">Ratón y teclado</span></div>
+      </section>
+
+      <section class="topic" id="toby-lang" aria-labelledby="toby-title">
+        <div class="topic__heading"><span class="topic__number">03</span><h3 id="toby-title">Toby Lang · el plano</h3></div>
+        <p><b>Toby Lang</b> sirve para decidir cómo será la pantalla de una aplicación: qué elementos aparecen, dónde van los botones y cómo se agrupan los textos y las opciones.</p>
+        <p>Es parecido a dibujar el plano de una habitación antes de construirla. Toby Lang describe la apariencia; la aplicación se encarga de lo que ocurre cuando alguien usa sus controles.</p>
+        <div class="sample-box aqua-box">
+          <h4 class="aqua-box__title">¿Para qué sirve?</h4>
+          <p>Para que las pantallas sean más fáciles de organizar y mantengan un aspecto coherente entre distintas aplicaciones.</p>
+        </div>
+      </section>
+
+      <section class="topic" id="appkit" aria-labelledby="appkit-title">
+        <div class="topic__heading"><span class="topic__number">04</span><h3 id="appkit-title">Toby AppKit · la caja común</h3></div>
+        <p><b>Toby AppKit</b> es una caja de herramientas compartida para crear aplicaciones. Ofrece piezas ya preparadas —como botones, campos y efectos visuales— para que cada app no tenga que inventarlo todo por separado.</p>
+        <p>Las aplicaciones pueden compartir el mismo estilo y, a la vez, conservar su propia función y personalidad.</p>
+        <div class="sample-box aqua-box">
+          <h4 class="aqua-box__title">¿Qué es un bundle?</h4>
+          <p>Es una carpeta-paquete que Rocky reconoce y abre como una sola aplicación. Dentro viajan juntos su nombre e icono, sus pantallas, sus imágenes y todo lo necesario para que funcione. Así, quien la usa abre la app sin tener que buscar sus piezas por separado.</p>
+        </div>
+      </section>
+    </div>
+
+    <section class="kernel-detail" id="detalle-kernel" aria-labelledby="kernel-detail-title">
+      <div class="kernel-detail__intro">
+        <p class="intro__eyebrow">Diseño del núcleo</p>
+        <h2 id="kernel-detail-title">La arquitectura del kernel</h2>
+        <p>Rocky reúne en un kernel monolítico x86-64 la gestión de memoria, la planificación, los controladores y los servicios de sistema. Sus componentes internos comparten el dominio privilegiado; las aplicaciones, en cambio, se ejecutan en espacios de usuario protegidos por la paginación del procesador.</p>
+      </div>
+
+      <div class="kernel-detail__body">
+        <section class="kernel-topic">
+          <h3>Arranque y control de la máquina</h3>
+          <p>La ruta de arranque usa <span class="kernel-keyword">BIOS Legacy</span>: el cargador prepara el procesador en modo largo y entrega el control al kernel. Una entrada mínima en ensamblador establece la pila y el estado inicial; a partir de ahí comienza la inicialización en Rust.</p>
+          <p>Rocky consulta los servicios de firmware antes de tomar control del <span class="kernel-keyword">PIC</span> y el <span class="kernel-keyword">PIT</span>; así evita que una llamada al BIOS interfiera con las interrupciones del kernel. La inicialización configura las tablas de interrupción y privilegio, recorre el bus PCI y prepara la memoria. El temporizador y el planificador se activan al final de esta secuencia.</p>
+        </section>
+
+        <section class="kernel-topic">
+          <h3>Memoria virtual y asignación</h3>
+          <p>El gestor físico toma el mapa E820 y administra la RAM en marcos de <span class="kernel-keyword">4 KiB</span>. La implementación actual puede gestionar hasta 1 GiB de memoria física y reserva los primeros 3 MiB para el firmware y las estructuras de arranque.</p>
+          <p>La paginación x86-64 usa cuatro niveles y mantiene un mapa de identidad de los primeros 4 GiB, con páginas de 2 MiB. En la mitad alta, Rocky crea una ventana de heap que crece según la demanda. El asignador combina bloques variables con clases <span class="kernel-keyword">slab</span> de 8 bytes a 2 KiB.</p>
+          <p>Cada proceso tiene una tabla raíz propia —su <span class="kernel-keyword">PML4</span>— y una región virtual de usuario de 1 GiB; el espacio no se compromete entero de antemano. Tras <span class="kernel-keyword">fork</span>, padre e hijo comparten páginas hasta que uno escribe: entonces se copia solo la página afectada, mediante <span class="kernel-keyword">copy-on-write</span>.</p>
+        </section>
+
+        <section class="kernel-topic">
+          <h3>Planificación y concurrencia</h3>
+          <p>El temporizador genera una interrupción cada centésima de segundo y permite al planificador apropiativo guardar el contexto actual y seleccionar otra tarea lista. Las tareas de interacción reciben prioridad frente al trabajo normal, sin monopolizar el procesador: si ambas clases tienen trabajo, tras ocho turnos interactivos se concede uno a la clase normal.</p>
+          <p>Es una garantía de equidad por turnos, no un plazo de respuesta en milisegundos. Las tareas que esperan un evento o un vencimiento dejan la cola de ejecución hasta que puedan continuar. El modelo actual planifica un único procesador; todavía no distribuye tareas entre varios núcleos mediante <span class="kernel-keyword">SMP</span>.</p>
+        </section>
+
+        <section class="kernel-topic">
+          <h3>Procesos y frontera de privilegio</h3>
+          <p>El kernel se ejecuta en <span class="kernel-keyword">anillo 0</span>; las aplicaciones, en <span class="kernel-keyword">anillo 3</span>. Las tablas de páginas mantienen las regiones del kernel como supervisor y exponen a cada proceso únicamente su propio espacio de usuario. La separación la aplica la CPU, no una convención entre aplicaciones.</p>
+          <p>Para pedir un servicio, un proceso cruza la puerta <span class="kernel-keyword">int 0x80</span>. La interfaz adopta registros y parte de la numeración de llamadas de Linux x86-64, pero sus estructuras y cobertura son propias: no constituye compatibilidad binaria general con Linux. Incluye operaciones de procesos, archivos, memoria, tuberías, señales y terminales.</p>
+        </section>
+
+        <section class="kernel-topic">
+          <h3>Dispositivos y almacenamiento</h3>
+          <p>El bus PCI permite identificar los dispositivos y sus regiones de registros. En gráficos, AMD Polaris dispone de un camino de configuración de pantalla mediante <span class="kernel-keyword">ATOMBIOS</span> y cursor DCE por hardware; Intel Haswell conserva el modo <span class="kernel-keyword">VBE</span> configurado por el firmware y Kira compone la imagen mediante la CPU. Esto aún no es una pila de aceleración 3D general.</p>
+          <p>Estrato escribe un volumen <span class="kernel-keyword">ext4</span> real con un perfil mínimo: bloques de 1 KiB e inodos de 128 bytes, sin journal, flex_bg ni sumas de comprobación. El formato es interoperable dentro de ese conjunto de características; no implementa todas las variantes de ext4.</p>
+        </section>
+
+        <section class="kernel-topic">
+          <h3>Fallos y diagnóstico</h3>
+          <p>Ante una excepción fatal o un pánico, Rocky usa una ruta de emergencia independiente de Kira, del planificador y del heap. Captura el estado disponible, lo comunica por pantalla y puerto serie y detiene el sistema; no intenta continuar sobre un estado posiblemente corrupto.</p>
+        </section>
+
+        <section class="rust-topic" aria-labelledby="rust-title">
+          <h3 id="rust-title">Rust como base de ingeniería</h3>
+          <p>Rocky se compila sin biblioteca estándar, en modo <span class="kernel-keyword">no_std</span>, y está escrito principalmente en <span class="kernel-keyword">Rust</span>. Una vez activo el asignador del kernel, <span class="kernel-keyword">alloc</span> permite usar colecciones dinámicas sin depender de un entorno de usuario.</p>
+          <p>Propiedad, préstamos y tipos hacen que el compilador compruebe muchas reglas de vida útil y acceso a memoria en el código seguro. El arranque, las interrupciones, las tablas de páginas, MMIO y los cambios de contexto todavía exigen ensamblador o bloques <span class="kernel-keyword">unsafe</span>. Rust reduce clases de errores; no sustituye la revisión de esas fronteras, ni demuestra por sí solo la corrección del sistema.</p>
+        </section>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <p>Rocky &amp; Toby OS · Proyecto en desarrollo</p>
+      <nav class="site-footer__links" aria-label="Más información">
+        <a href="AQUA/index.html">Controles AQUA</a>
+        <a href="TobyUI-Especificacion.html">Toby UI</a>
+        <a href="README.md">README</a>
+      </nav>
+    </footer>
+  </main>
+</body>
+</html>

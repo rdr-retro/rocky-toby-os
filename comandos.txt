@@ -1,0 +1,2 @@
+--- arranque de rocky ---
+echo Un placer verte por aqui. Escribe 'help'.

@@ -1,0 +1,106 @@
+/* ==========================================================================
+   TEXT FIELD AQUA · entrada de texto (estilo macOS "Text Field")
+   --------------------------------------------------------------------------
+   Es un <input type="text"> real: el teclado, la selección, el pegado, el
+   autocompletar del navegador y la accesibilidad vienen de serie, así que no
+   hace falta nada de JavaScript. Se le quita la apariencia nativa y la piel la
+   ponen las piezas BLANCAS del segmented, pero SIN redondear: el extremo recto
+   es segmented_withe_left.png y a la derecha va ese MISMO PNG volteado
+   (scaleX(-1)):
+
+       [ withe_left ][ withe_body estirable ][ withe_left volteada ]
+
+   El cuerpo se pinta en el propio <input> (fondo estirado) y los dos extremos
+   en los pseudoelementos del contenedor, que van encima y no reciben clics:
+   todo el campo lo maneja el <input>. El marcado queda mínimo:
+
+       <span class="aqua-field">
+         <input class="aqua-field__input" type="text">
+       </span>
+
+   Alto con --aqua-field-h y ancho con --aqua-field-w (todo lo demás se deriva).
+   ========================================================================== */
+
+.aqua-field {
+  /* Alto del control. */
+  --aqua-field-h: 26px;
+  /* Ancho del campo. */
+  --aqua-field-w: 240px;
+  /* Ancho del extremo en la imagen: 170 de 418 de alto. */
+  --aqua-field-cap: calc(var(--aqua-field-h) * 170 / 418);
+  /* Color del texto escrito. */
+  --aqua-field-ink: #3c3c3e;
+
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  width: var(--aqua-field-w);
+  max-width: 100%;
+  height: var(--aqua-field-h);
+  vertical-align: middle;
+}
+
+/* --- el <input> real: el cuerpo estirado y el texto --- */
+.aqua-field__input {
+  -webkit-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border: 0;
+  background-color: transparent;
+  /* cuerpo: se estira y deja libre el ancho de cada extremo */
+  background-image: url("segmented_withe_body.png");
+  background-position: center center;
+  background-size: max(0px, calc(100% - var(--aqua-field-cap) * 2)) 100%;
+  background-repeat: no-repeat;
+  /* el texto arranca pasado el extremo */
+  padding: 0 var(--aqua-field-cap);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  font-size: calc(var(--aqua-field-h) * .42);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--aqua-field-ink);
+  caret-color: var(--aqua-field-ink);
+}
+
+.aqua-field__input::placeholder {
+  color: #9a9a9e;
+  opacity: 1;
+}
+
+/* --- los dos extremos (la misma pieza; la derecha, volteada) --- */
+.aqua-field::before,
+.aqua-field::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--aqua-field-cap);
+  background-image: url("segmented_withe_left.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+.aqua-field::before {
+  left: 0;
+}
+.aqua-field::after {
+  right: 0;
+  transform: scaleX(-1);
+}
+
+/* --- estados --- */
+.aqua-field:has(.aqua-field__input:focus-visible) {
+  outline: 3px solid #8fd0ff;
+  outline-offset: 2px;
+}
+
+.aqua-field:has(.aqua-field__input:disabled) {
+  opacity: .5;
+}
+.aqua-field__input:disabled {
+  cursor: not-allowed;
+}

@@ -1,0 +1,25 @@
+<toby-app name="controles">
+  <window title="Controles" width="480" height="300">
+    <stack width="480" height="300">
+      <button id="ok" name="aceptar" x="20" y="16" title="Aceptar" variant="blue" action="demo.pulsar"/>
+      <check id="c1" name="recordar" x="20" y="52" label="Recordar" variant="blue" checked="true"/>
+      <check id="c2" name="sin-marcar" x="170" y="52" label="Sin marcar" variant="green"/>
+      <check id="c3" name="apagado" x="330" y="52" label="Apagado" variant="red" enabled="false" checked="true"/>
+      <radio id="r1" name="opcion-a" x="20" y="84" label="Opcion A" group="g" checked="true" variant="blue"/>
+      <radio id="r2" name="opcion-b" x="170" y="84" label="Opcion B" group="g" variant="blue"/>
+      <radio id="r3" name="blanco" x="330" y="84" label="Blanco" group="g" variant="white" enabled="false"/>
+      <circular id="k1" name="rojo" x="20" y="116" title="1" variant="red"/>
+      <circular id="k2" name="verde" x="64" y="116" title="2" variant="green" enabled="false"/>
+      <segmented id="sg" name="tamano" x="120" y="116" items="Pequeño|Mediano|Grande" selected="1" variant="blue"/>
+      <popup id="pp" name="color" x="330" y="116" items="Rojo|Verde|Azul" selected="2" variant="magenta"/>
+      <field id="f1" name="escribe" x="20" y="156" placeholder="Escribe aqui" width="180"/>
+      <field id="f2" name="inicial" x="230" y="156" value="texto inicial" width="180"/>
+      <slider id="s1" name="volumen" x="20" y="196" value="30" min="0" max="100" width="200" variant="blue"/>
+      <slider-gota id="s2" name="brillo" x="250" y="196" value="70" min="0" max="100" width="190" variant="red"/>
+      <check id="c4" name="blanco-marcado" x="20" y="236" label="Check blanco" variant="white" checked="true"/>
+      <slider id="s3" name="sin-tocar" x="250" y="236" value="10" min="0" max="50" width="190" variant="green" enabled="false"/>
+      <popup id="p2" name="uno-dos" x="20" y="266" items="Uno|Dos" selected="0" variant="white"/>
+      <segmented id="sg2" name="si-no" x="160" y="266" items="Si|No" selected="1" variant="red"/>
+    </stack>
+  </window>
+</toby-app>

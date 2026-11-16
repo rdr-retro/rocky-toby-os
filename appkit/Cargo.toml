@@ -1,0 +1,14 @@
+[package]
+name = "toby-appkit"
+version = "0.1.0"
+edition = "2021"
+description = "Toby AppKit: editor visual y herramientas para crear, validar y compilar aplicaciones Rocky .app."
+publish = false
+
+# Unico crate externo: el descodificador PNG del propio rocky (no_std y sin
+# dependencias), el mismo que usan el kernel y el interprete.
+[dependencies]
+png = { path = "../kernel/src/libraries/png" }
+
+# Crate suelto: no forma parte de ningun workspace.
+[workspace]

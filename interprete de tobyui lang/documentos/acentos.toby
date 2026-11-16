@@ -1,0 +1,12 @@
+<toby-app name="acentos">
+  <window title="Acentos" width="480" height="300">
+    <stack width="480" height="300">
+      <button id="b1" x="20" y="16" title="ÁÉÍÓÚÑ" variant="blue" action="demo.pulsar"/>
+      <segmented id="sg" x="20" y="52" items="Pequeño|Mediano|Grande" selected="1" variant="blue"/>
+      <field id="f1" x="20" y="88" value="Ñandú ãõ ý" width="220"/>
+      <field id="f2" x="20" y="124" placeholder="¿Cómo estás?" width="220"/>
+      <radio id="r1" x="20" y="160" label="Ñoño Ágil" group="g" checked="true" variant="blue"/>
+      <check id="c1" x="20" y="192" label="ÄÖÜ Çç" variant="green" checked="true"/>
+    </stack>
+  </window>
+</toby-app>

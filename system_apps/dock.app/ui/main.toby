@@ -1,0 +1,9 @@
+<toby-app name="dock">
+  <window title="Dock" width="480" height="300" align="center">
+    <column padding="24" spacing="12">
+      <button id="titulo" title="Dock del escritorio Rocky" variant="blue" enabled="false"/>
+      <button id="contenedor" title="Contenedor azul anclado abajo con borde de 1 px" variant="white" enabled="false"/>
+      <button id="estado" title="Toby Finder viene anclado y no se puede quitar" variant="green" enabled="false"/>
+    </column>
+  </window>
+</toby-app>

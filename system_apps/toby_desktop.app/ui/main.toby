@@ -1,0 +1,9 @@
+<toby-app name="toby_desktop">
+  <window title="Toby Desktop" width="360" height="220" align="center">
+    <column padding="24" spacing="12">
+      <image src="/system/apps/toby_desktop.app/img/toby.png" width="48" height="48"/>
+      <button id="titulo" title="Toby Desktop — escritorio del sistema" variant="blue" enabled="false"/>
+      <button id="detalle" title="El icono Toby y sus estados viven en este bundle" variant="white" enabled="false"/>
+    </column>
+  </window>
+</toby-app>

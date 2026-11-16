@@ -1,0 +1,134 @@
+/* ==========================================================================
+   RADIO AQUA · esferas glossy (mismo material que el botón)
+   --------------------------------------------------------------------------
+   Usa un <input type="radio"> real (accesible, navegable con teclado) y lo
+   oculta; el aspecto lo pone una esfera:
+       gris  = sin marcar   (gray_radio.png)
+       azul  = marcado      (blue_radio.png)
+
+   Tamaño con --aqua-radio-size. El punto central va en negro y es opcional
+   con .aqua-radio--pip (color configurable con --aqua-radio-pip).
+   ========================================================================== */
+
+.aqua-radio {
+  /* Diámetro (alto) de la esfera. */
+  --aqua-radio-size: 26px;
+  /* Proporción nativa 682 : 653 (las esferas son ~4 % más anchas que altas). */
+  --aqua-radio-w: calc(var(--aqua-radio-size) * 682 / 653);
+  /* Esfera marcada (azul por defecto; variantes más abajo) y tinte de sombra. */
+  --aqua-radio-on: url("blue_radio.png");
+  --aqua-radio-shadow: 5, 30, 64;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--aqua-radio-size) * .42);
+  cursor: pointer;
+  user-select: none;
+  font: inherit;
+  /* Fuente propia: la demo no decora la página, así que no hereda de nada. */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  line-height: 1.25;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* --- input nativo, oculto pero funcional --- */
+.aqua-radio__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* --- la esfera --- */
+.aqua-radio__dot {
+  position: relative;
+  flex: 0 0 auto;
+  width: var(--aqua-radio-w);
+  height: var(--aqua-radio-size);
+  background-image: url("gray_radio.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  filter: drop-shadow(0 1px 2px rgba(var(--aqua-radio-shadow), .40));
+  transition: filter .16s ease, transform .12s ease;
+}
+
+.aqua-radio__input:checked + .aqua-radio__dot {
+  background-image: var(--aqua-radio-on);
+}
+
+/* --- variantes de color ---------------------------------------------------
+   Las mismas esferas con el tono girado (las genera recolorear.py). Las
+   grises (sin marcar) no cambian: no tienen color que girar. */
+.aqua-radio--blue    { --aqua-radio-on: url("blue_radio.png"); }
+.aqua-radio--green   { --aqua-radio-on: url("green_radio.png");   --aqua-radio-shadow: 12, 74, 34; }
+.aqua-radio--red     { --aqua-radio-on: url("red_radio.png");     --aqua-radio-shadow: 104, 12, 12; }
+.aqua-radio--orange  { --aqua-radio-on: url("orange_radio.png");  --aqua-radio-shadow: 116, 60, 6; }
+.aqua-radio--yellow  { --aqua-radio-on: url("yellow_radio.png");  --aqua-radio-shadow: 122, 96, 10; }
+.aqua-radio--magenta { --aqua-radio-on: url("magenta_radio.png"); --aqua-radio-shadow: 104, 12, 92; }
+
+/* --- texto --- */
+.aqua-radio__text {
+  font-size: calc(var(--aqua-radio-size) * .62);
+  color: var(--aqua-radio-text, #1d1d1f);
+}
+
+/* --- punto central: dot.png puesto encima (sin CSS dibujado) ---
+   El punto no viene centrado en su PNG: lienzo de 1000 x 1000, círculo de
+   232 px cuyo centro está en (500.5, 495.5). Se recentra con
+   background-position y se escala con la esfera. */
+.aqua-radio__dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* diámetro del punto y escala del PNG (232 px de dibujo en el lienzo) */
+  --aqua-pip-d: calc(var(--aqua-radio-size) * .34);
+  --aqua-pip-s: calc(var(--aqua-pip-d) / 232);
+  background-image: url("dot.png");
+  background-repeat: no-repeat;
+  background-size: calc(var(--aqua-pip-s) * 1000) calc(var(--aqua-pip-s) * 1000);
+  background-position:
+    calc(50% - var(--aqua-pip-s) * .5)
+    calc(50% + var(--aqua-pip-s) * 4.5);
+  opacity: 0;
+  transform: scale(.4);
+  transition: transform .16s ease, opacity .14s ease;
+}
+
+.aqua-radio__input:checked + .aqua-radio__dot::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* --- estados --- */
+.aqua-radio:hover .aqua-radio__dot {
+  filter: brightness(1.08) saturate(1.05) drop-shadow(0 2px 4px rgba(var(--aqua-radio-shadow), .45));
+}
+
+.aqua-radio:active .aqua-radio__dot {
+  transform: scale(.93);
+}
+
+.aqua-radio__input:focus-visible + .aqua-radio__dot {
+  outline: 3px solid #8fd0ff;
+  outline-offset: 3px;
+  border-radius: 50%;
+}
+
+.aqua-radio:has(.aqua-radio__input:disabled) {
+  cursor: not-allowed;
+  opacity: .55;
+}
+
+.aqua-radio:has(.aqua-radio__input:disabled) .aqua-radio__dot {
+  filter: grayscale(.7) drop-shadow(0 1px 2px rgba(var(--aqua-radio-shadow), .3));
+}
+
+.aqua-radio:has(.aqua-radio__input:disabled):hover .aqua-radio__dot {
+  filter: grayscale(.7) drop-shadow(0 1px 2px rgba(var(--aqua-radio-shadow), .3));
+  transform: none;
+}

@@ -1,0 +1,18 @@
+[package]
+name = "verificacion"
+version = "0.1.0"
+edition = "2021"
+autobins = false
+
+[[bin]]
+name = "verificacion"
+path = "src/main.rs"
+
+[dependencies]
+toby-appkit = { path = "../../../kernel/src/libraries/toby_appkit" }
+
+[workspace]
+
+[profile.release]
+panic = "abort"
+opt-level = 2

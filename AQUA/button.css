@@ -1,0 +1,161 @@
+/* ==========================================================================
+   BOTÓN AQUA · ensamblado con 3 slices
+   --------------------------------------------------------------------------
+   El botón se compone de tres imágenes PNG (258 x 409 px cada cap, 30 x 409
+   el cuerpo) unidas con flexbox:
+
+      [ cap izquierdo ]  [ cuerpo estirable ]  [ cap derecho ]
+
+   - Los "caps" mantienen su proporción real (no se deforman).
+   - El "cuerpo" es un slice de 30 px que se estira al ancho disponible y
+     hace crecer el botón según el texto.
+
+   Para cambiar el tamaño, sólo hay que ajustar la variable --aqua-size
+   (o --aqua-h) en cualquier ancestro o directamente en el botón.
+   ========================================================================== */
+
+.aqua-btn {
+  /* Alto total (px). Todo lo demás se deriva de aquí. */
+  --aqua-h: var(--aqua-size, 62px);
+  /* Ancho de cada cap, respetando la proporción nativa 258 : 409 */
+  --aqua-cap-w: calc(var(--aqua-h) * 258 / 409);
+  /* Las tres piezas del botón. Aquí es donde entran las variantes de color
+     (--green, --red, ... más abajo): azul es el original. */
+  --aqua-cap-left: url("left_button_blue.png");
+  --aqua-cap-right: url("right_button_blue.png");
+  --aqua-body: url("body_button_blue.png");
+  /* Tinte de la sombra, como trío R, G, B (para poder cambiarle el alfa). */
+  --aqua-shadow: 5, 30, 64;
+  /* Color de la etiqueta (por defecto azul marino oscuro = buen contraste) */
+  --aqua-label: #0a2e52;
+
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  height: var(--aqua-h);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: calc(var(--aqua-h) / 2); /* sólo para que el foco sea pastilla */
+  background: none;
+  font: inherit;
+  /* Fuente propia: la demo no decora la página, así que no hereda de nada. */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  line-height: 1;
+  color: inherit;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  /* La sombra sigue la silueta real de los PNG (canal alfa) */
+  filter: drop-shadow(0 3px 4px rgba(var(--aqua-shadow), .40));
+  transition: filter .16s ease, transform .16s ease, opacity .16s ease;
+}
+
+/* ---- Piezas laterales (izquierda / derecha) ------------------------------ */
+.aqua-btn__cap {
+  flex: 0 0 auto;
+  width: var(--aqua-cap-w);
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  pointer-events: none;
+}
+
+.aqua-btn__cap--left  { background-image: var(--aqua-cap-left); }
+.aqua-btn__cap--right { background-image: var(--aqua-cap-right); }
+
+/* ---- Cuerpo central (slice estirable) ----------------------------------- */
+.aqua-btn__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Separación del texto respecto de las zonas redondeadas */
+  padding: 0 calc(var(--aqua-h) * .42);
+  background-image: var(--aqua-body);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+/* ---- Etiqueta ----------------------------------------------------------- */
+.aqua-btn__label {
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: calc(var(--aqua-h) * .28);
+  font-weight: 600;
+  letter-spacing: .015em;
+  color: var(--aqua-label);
+  /* grabado sutil, típico de los botones "glass" */
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .45);
+}
+
+/* ---- Estados ------------------------------------------------------------ */
+.aqua-btn:hover,
+.aqua-btn.is-hover {
+  filter: brightness(1.06) saturate(1.06) drop-shadow(0 5px 9px rgba(var(--aqua-shadow), .45));
+  transform: translateY(-1px);
+}
+
+.aqua-btn:active,
+.aqua-btn.is-active {
+  filter: brightness(.94) drop-shadow(0 1px 2px rgba(var(--aqua-shadow), .45));
+  transform: translateY(1px);
+}
+
+.aqua-btn:focus-visible {
+  outline: 3px solid #8fd0ff;
+  outline-offset: 3px;
+}
+
+.aqua-btn:disabled,
+.aqua-btn[aria-disabled="true"] {
+  cursor: not-allowed;
+  filter: grayscale(.7) opacity(.55) drop-shadow(0 2px 3px rgba(var(--aqua-shadow), .25));
+  transform: none;
+}
+
+.aqua-btn:disabled:hover,
+.aqua-btn:disabled:active {
+  filter: grayscale(.7) opacity(.55) drop-shadow(0 2px 3px rgba(var(--aqua-shadow), .25));
+  transform: none;
+}
+
+/* ---- Variante de etiqueta clara (estilo “clásico”) ---------------------- */
+.aqua-btn--light-label { --aqua-label: #ffffff; }
+.aqua-btn--light-label .aqua-btn__label {
+  text-shadow:
+    0 -1px 0 rgba(6, 34, 74, .75),
+    0 1px 2px rgba(6, 34, 74, .55);
+}
+
+/* ---- Variantes de color --------------------------------------------------
+   El mismo botón con las tres piezas cambiadas. Los PNG de color los genera
+   "recolorear.py" girando el tono de los azules originales, así que el brillo,
+   el glossy y la silueta son idénticos. El azul es el original y el blanco es
+   el mismo botón sin color (sólo lo tiene el botón, no los demás controles). */
+
+.aqua-btn--blue    { --aqua-cap-left: url("left_button_blue.png");    --aqua-cap-right: url("right_button_blue.png");    --aqua-body: url("body_button_blue.png"); }
+.aqua-btn--green   { --aqua-cap-left: url("left_button_green.png");   --aqua-cap-right: url("right_button_green.png");   --aqua-body: url("body_button_green.png");   --aqua-shadow: 12, 74, 34; }
+.aqua-btn--red     { --aqua-cap-left: url("left_button_red.png");     --aqua-cap-right: url("right_button_red.png");     --aqua-body: url("body_button_red.png");     --aqua-shadow: 104, 12, 12; }
+.aqua-btn--orange  { --aqua-cap-left: url("left_button_orange.png");  --aqua-cap-right: url("right_button_orange.png");  --aqua-body: url("body_button_orange.png");  --aqua-shadow: 116, 60, 6; }
+.aqua-btn--yellow  { --aqua-cap-left: url("left_button_yellow.png");  --aqua-cap-right: url("right_button_yellow.png");  --aqua-body: url("body_button_yellow.png");  --aqua-shadow: 122, 96, 10; }
+.aqua-btn--magenta { --aqua-cap-left: url("left_button_magenta.png"); --aqua-cap-right: url("right_button_magenta.png"); --aqua-body: url("body_button_magenta.png"); --aqua-shadow: 104, 12, 92; }
+.aqua-btn--white   { --aqua-cap-left: url("left_button_white.png");   --aqua-cap-right: url("right_button_white.png");   --aqua-body: url("body_button_white.png");   --aqua-shadow: 72, 84, 102; }
+
+/* ---- Tamaños predefinidos ---------------------------------------------- */
+.aqua-btn--xs { --aqua-size: 40px; }
+.aqua-btn--sm { --aqua-size: 52px; }
+.aqua-btn--md { --aqua-size: 62px; }
+.aqua-btn--lg { --aqua-size: 78px; }
+.aqua-btn--xl { --aqua-size: 96px; }
+
+/* ---- Botón ancho (ocupa el 100% del contenedor) ------------------------- */
+.aqua-btn--block { display: flex; width: 100%; }

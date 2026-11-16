@@ -1,0 +1,57 @@
+<!-- Composicion de los botones de Toby UI.
+
+     Este fichero SOLO declara: que hay, como se ordena, como se llama cada
+     elemento (name, unico en el documento, como en HTML) y a que accion
+     registrada llama cada boton. No hay variables, ni funciones, ni bucles, ni
+     condiciones, ni codigo de ningun tipo.
+
+     La primera fila muestra las TRES piezas PNG que forman un boton AQUA
+     (extremo izquierdo + cuerpo estirable + extremo derecho). Las filas
+     siguientes muestran esos mismos botones YA ENSAMBLADOS, uno por color del
+     kit. El color sale del tema (variant), no del documento. -->
+<toby-app name="composicion">
+
+  <!-- `align="stretch"`: la columna ocupa todo el ancho de la ventana, que es
+       lo que da el host (pantalla completa). Dentro, `align="center"` centra
+       las filas en ese ancho. Con un host de 480x300 el resultado es exactamente
+       el mismo que con el tamano declarado. -->
+  <window title="Toby UI  -  composicion de botones" width="480" height="300" align="stretch">
+
+    <column padding="20" spacing="14" width="480" height="300" align="center">
+
+      <!-- 1. Las tres piezas que ensambla el tema (3-slice). -->
+      <row spacing="12">
+        <image id="pieza_izq"    name="pieza-izq"
+               src="/usr/share/tobyui/themes/default/left_button_blue.png"
+               width="120" height="96" fit="contain"/>
+        <image id="pieza_cuerpo" name="pieza-cuerpo"
+               src="/usr/share/tobyui/themes/default/body_button_blue.png"
+               width="120" height="96" fit="contain"/>
+        <image id="pieza_der"    name="pieza-der"
+               src="/usr/share/tobyui/themes/default/right_button_blue.png"
+               width="120" height="96" fit="contain"/>
+      </row>
+
+      <!-- 2. Botones ensamblados: un color del kit por boton. -->
+      <row spacing="12">
+        <button id="b_azul"    name="azul"    title="Azul"    variant="blue"    action="demo.pulsar"/>
+        <button id="b_verde"   name="verde"   title="Verde"   variant="green"   action="demo.pulsar"/>
+        <button id="b_rojo"    name="rojo"    title="Rojo"    variant="red"     action="demo.pulsar"/>
+        <button id="b_naranja" name="naranja" title="Naranja" variant="orange"  action="demo.pulsar"/>
+      </row>
+
+      <row spacing="12">
+        <button id="b_amarillo" name="amarillo" title="Amarillo" variant="yellow"  action="demo.pulsar"/>
+        <button id="b_magenta"  name="magenta"  title="Magenta"  variant="magenta" action="demo.pulsar"/>
+        <button id="b_blanco"   name="blanco"   title="Blanco"   variant="white"   action="demo.pulsar"/>
+        <button id="b_apagado"  name="apagado"  title="Apagado"  enabled="false"/>
+      </row>
+
+      <!-- 3. Cerrar. -->
+      <row spacing="12">
+        <button id="b_cerrar" name="cerrar" title="Cerrar" variant="blue" action="window.cerrar"/>
+      </row>
+
+    </column>
+  </window>
+</toby-app>

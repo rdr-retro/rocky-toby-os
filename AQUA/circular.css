@@ -1,0 +1,118 @@
+/* ==========================================================================
+   CIRCULAR BUTTON AQUA · botón redondo (la esfera del radio sin marcar)
+   --------------------------------------------------------------------------
+   Es un <button> real, sin JavaScript. La cara es la MISMA esfera que usa el
+   radio, pero SIN selección (sin el punto central que le pone radio.css): el
+   círculo queda idéntico al de un radio sin marcar.
+
+       gris (por defecto) : gray_radio.png    · la esfera del radio sin marcar
+       color              : <color>_radio.png · las esferas de color del radio
+                                                (también sin punto)
+
+   No lleva punto, ni tick, ni marca de ningún tipo: es un botón redondo, no
+   una opción.
+
+   Diámetro con --aqua-circular-size; el ancho sale de la proporción nativa de
+   la pieza (682 : 653, la misma que usa el radio). El texto es opcional: si
+   se pone, va centrado en el círculo.
+
+   Estructura:
+     <button class="aqua-circular" type="button" aria-label="Cerrar">
+       <span class="aqua-circular__face" aria-hidden="true"></span>
+       <span class="aqua-circular__label">OK</span>   (opcional)
+     </button>
+   ========================================================================== */
+
+.aqua-circular {
+  /* Diámetro (alto) del círculo. */
+  --aqua-circular-size: 26px;
+  /* Cara: la esfera del radio sin marcar (las variantes de color van al final). */
+  --aqua-circular-face: url("gray_radio.png");
+  /* Tinte de la sombra (trío R, G, B). */
+  --aqua-circular-shadow: 5, 30, 64;
+  /* Texto opcional (mismo azul marino que la etiqueta del botón). */
+  --aqua-circular-ink: #0a2e52;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  /* Proporción nativa de la pieza: 682 de ancho por 653 de alto. */
+  width: calc(var(--aqua-circular-size) * 682 / 653);
+  height: var(--aqua-circular-size);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  -webkit-appearance: none;
+  appearance: none;
+  font: inherit;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  font-size: calc(var(--aqua-circular-size) * .42);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--aqua-circular-ink);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* --- la cara: la esfera, estirada al tamaño del botón --- */
+.aqua-circular__face {
+  position: absolute;
+  inset: 0;
+  background-image: var(--aqua-circular-face);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  filter: drop-shadow(0 1px 2px rgba(var(--aqua-circular-shadow), .40));
+  transition: filter .16s ease, transform .12s ease;
+  pointer-events: none;
+}
+
+/* --- texto opcional, centrado en el círculo --- */
+.aqua-circular__label {
+  position: relative;
+  padding: 0 .16em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* --- variantes de color ---------------------------------------------------
+   Las esferas de color del radio (las que usa cuando está seleccionado) pero
+   sin el punto: las genera recolorear.py girando el tono de las azules. La
+   gris (por defecto) no cambia: no tiene color que girar. */
+.aqua-circular--blue    { --aqua-circular-face: url("blue_radio.png"); }
+.aqua-circular--green   { --aqua-circular-face: url("green_radio.png");   --aqua-circular-shadow: 12, 74, 34; }
+.aqua-circular--red     { --aqua-circular-face: url("red_radio.png");     --aqua-circular-shadow: 104, 12, 12; }
+.aqua-circular--orange  { --aqua-circular-face: url("orange_radio.png");  --aqua-circular-shadow: 116, 60, 6; }
+.aqua-circular--yellow  { --aqua-circular-face: url("yellow_radio.png");  --aqua-circular-shadow: 122, 96, 10; }
+.aqua-circular--magenta { --aqua-circular-face: url("magenta_radio.png"); --aqua-circular-shadow: 104, 12, 92; }
+/* El blanco es la esfera sin color (la genera recolorear.py con la saturación
+   casi a cero): mismo brillo y mismo glossy, pero en blanco/gris. */
+.aqua-circular--white   { --aqua-circular-face: url("white_radio.png");   --aqua-circular-shadow: 72, 84, 102; }
+
+/* --- estados --- */
+.aqua-circular:hover .aqua-circular__face {
+  filter: brightness(1.08) saturate(1.05) drop-shadow(0 2px 4px rgba(var(--aqua-circular-shadow), .45));
+}
+
+.aqua-circular:active .aqua-circular__face {
+  transform: scale(.93);
+}
+
+.aqua-circular:focus-visible {
+  outline: 3px solid #8fd0ff;
+  outline-offset: 3px;
+  border-radius: 50%;
+}
+
+.aqua-circular:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+
+.aqua-circular:disabled .aqua-circular__face {
+  filter: grayscale(.7) drop-shadow(0 1px 2px rgba(var(--aqua-circular-shadow), .3));
+  transform: none;
+}
